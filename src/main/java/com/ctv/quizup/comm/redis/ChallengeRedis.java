@@ -75,12 +75,16 @@ public class ChallengeRedis {
 
 	public Challenge getChallengeById(String challengeId) {
 		Challenge challenge = null;
-		/* GET USER FROM REDIS */
+		/* GET CHALLENGE FROM REDIS */
 		String uChallenge = "";
 		Jedis jedis = RedisPool.getJedis();
 		try {
 			// Add to sorted-set
 			uChallenge = jedis.hget(this.getChallengeKey(), challengeId);
+			if(uChallenge == null) {
+				return null;
+			}
+			
 		} catch (JedisConnectionException ex) {
 			RedisPool.getIntance().returnBrokenResource(jedis);
 		} catch (Exception e) {
@@ -88,7 +92,7 @@ public class ChallengeRedis {
 		} finally {
 			RedisPool.getIntance().returnResource(jedis);
 		}
-		/* PARSE USER FROM JSON TO JAVA-OBJECT */
+		/* PARSE CHALLENGE FROM JSON TO JAVA-OBJECT */
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			challenge = mapper.readValue(uChallenge, Challenge.class);
@@ -156,14 +160,16 @@ public class ChallengeRedis {
 		this.deleteUserChallenge(challengeId, userId, status, "receiver");
 	}
 	
+	//public void delete
+	
 	
 	public void deleteUserChallenge(String challengeId, String userId, String status, String type) {
 		Jedis jedis = RedisPool.getJedis();
 		try {
 			if(type.equalsIgnoreCase("sender")){
-				jedis.hdel(this.getUserSenderKey(userId, status), challengeId, challengeId);
+				jedis.hdel(this.getUserSenderKey(userId, status), challengeId);
 			} else if(type.equalsIgnoreCase("receiver")) {
-				jedis.hdel(this.getUserReceiverKey(userId, status), challengeId, challengeId);
+				jedis.hdel(this.getUserReceiverKey(userId, status), challengeId);
 			}
 		} catch (JedisConnectionException ex) {
 			RedisPool.getIntance().returnBrokenResource(jedis);

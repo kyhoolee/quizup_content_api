@@ -100,6 +100,14 @@ public class Challenge {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+
+	public String getMatchId() {
+		return matchId;
+	}
+	public void setMatchId(String matchId) {
+		this.matchId = matchId;
+	}
+	
 	
 	
 	@Override
@@ -117,17 +125,12 @@ public class Challenge {
 		
 		return result;
 	}
-	public String getMatchId() {
-		return matchId;
-	}
-	public void setMatchId(String matchId) {
-		this.matchId = matchId;
-	}
-	
 	
 	public static void main(String[] args) {
 		Challenge chall = new Challenge("topic-1", "match-1", "user-1", "rival-1");
 		
 		System.out.println(chall.toString());
 	}
+	
+	
 }

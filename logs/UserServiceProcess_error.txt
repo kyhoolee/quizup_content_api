@@ -1,0 +1,4 @@
+03 Nov 2014 14:38:10.200 [main] ERROR UserServiceProcess_error  - 
+  org.codehaus.jackson.map.exc.UnrecognizedPropertyException: Unrecognized field "avartarUrl" (Class com.ctv.quizup.user.business.impl.UserServiceProcess$UserInfo), not marked as ignorable
+ at [Source: java.io.StringReader@2e920878; line: 1, column: 35] (through reference chain: com.ctv.quizup.user.business.impl.UserResponse["user"]->com.ctv.quizup.user.business.impl.UserInfo["avartarUrl"])
+ 

@@ -21,6 +21,14 @@ public class MatchResult {
 		this.createdDate = new Date();
 	}
 	
+	public MatchResult(String matchId, int result, Date createdDate) {
+		this.matchId = matchId;
+		this.isFinished = true;
+		this.result = result;
+		this.createdDate = createdDate;
+	}
+	
+	
 	public MatchResult(String matchId) {
 		this.matchId = matchId;
 		this.createdDate = new Date();

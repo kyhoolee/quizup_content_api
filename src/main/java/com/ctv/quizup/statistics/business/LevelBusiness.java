@@ -9,7 +9,8 @@ import org.apache.log4j.Logger;
 
 import com.ctv.quizup.match.model.MatchQuestionLog;
 import com.ctv.quizup.statistics.TopicLevelCompute;
-import com.ctv.quizup.statistics.redis.UserLevelStatRedis;
+import com.ctv.quizup.statistics.redis.TriggerStatsRedis;
+import com.ctv.quizup.user.business.impl.LeaderBoardProcess;
 import com.ctv.quizup.user.business.impl.UserTopicProcess;
 import com.ctv.quizup.user.model.UserTopicLevel;
 import com.ctv.quizup.util.LoggerUtil;
@@ -18,12 +19,16 @@ public class LevelBusiness extends MatchBaseBusiness {
 	public static Logger logger = LoggerUtil.getDailyLogger("LevelBusiness" + "_error");
 	
 	private UserTopicProcess userTopic;
-	private UserLevelStatRedis levelStatRedis;
+	private TriggerStatsRedis levelStatRedis;
+	
+	private LeaderBoardProcess leaderProcess;
+	
 	
 	public LevelBusiness() {
 		super();
 		this.userTopic = new UserTopicProcess();
-		this.levelStatRedis = new UserLevelStatRedis();
+		this.levelStatRedis = new TriggerStatsRedis();
+		this.leaderProcess = new LeaderBoardProcess();
 	}
 	
 	public void process(String matchId) {
@@ -87,10 +92,10 @@ public class LevelBusiness extends MatchBaseBusiness {
 		
 		UserTopicLevel userLevel = this.userTopic.getUserTopic(userId, topicId);
 		
-		if(this.levelStatRedis.checkUserMatch(super.getMatchBase().getMatchId(), userId)) {
+		if(this.levelStatRedis.checkUserLevelMatch(super.getMatchBase().getMatchId(), userId)) {
 			return userLevel;
 		} else {
-			this.levelStatRedis.writeUserMatch(super.getMatchBase().getMatchId(), userId);
+			this.levelStatRedis.writeUserLevelMatch(super.getMatchBase().getMatchId(), userId);
 		}
 		
 		if(userId.equalsIgnoreCase(firstId)) {
@@ -117,11 +122,11 @@ public class LevelBusiness extends MatchBaseBusiness {
 		UserTopicLevel userLevel = this.userTopic.getUserTopic(userId, topicId);
 		levelList.add(userLevel);
 		
-		if(this.levelStatRedis.checkUserMatch(super.getMatchBase().getMatchId(), userId)) {
+		if(this.levelStatRedis.checkUserLevelMatch(super.getMatchBase().getMatchId(), userId)) {
 			levelList.add(userLevel);
 			return levelList;
 		} else {
-			this.levelStatRedis.writeUserMatch(super.getMatchBase().getMatchId(), userId);
+			this.levelStatRedis.writeUserLevelMatch(super.getMatchBase().getMatchId(), userId);
 		}
 		
 		if(userId.equalsIgnoreCase(firstId)) {
@@ -164,15 +169,24 @@ public class LevelBusiness extends MatchBaseBusiness {
 		logger.info("userTopicLevel: " + userLevel.toString());
 		logger.info("result: " + result);
 		logger.info("log: " + log.toString());
-		UserTopicLevel topicLevel = TopicLevelCompute.updateXPFromMatchResult(userLevel, result, log);
+		
+		int addXP = TopicLevelCompute.getAddXPFromMatchResult(this.getMatchBase().getMatchId(), result, log);
+		
+		UserTopicLevel topicLevel = TopicLevelCompute.updateXP(userLevel, addXP); 
+				//TopicLevelCompute.updateXPFromMatchResult(userLevel, result, log);
+		
 		logger.info("ComputedLevel: " + userLevel.toString());
 		this.userTopic.updateUserTopicLevel(topicLevel);
+		
+		// Update leader-board
+		this.leaderProcess.updateUserTopicScore(userLevel.getUserId(), userLevel.getTopicId(), addXP);
+		
 		return topicLevel;
 	}
 	
 	public UserTopicLevel computeUserLevel(UserTopicLevel userLevel, int result, List<MatchQuestionLog> log) {
 		
-		UserTopicLevel topicLevel = TopicLevelCompute.updateXPFromMatchResult(userLevel, result, log);
+		UserTopicLevel topicLevel = TopicLevelCompute.updateXPFromMatchResult(this.getMatchBase().getMatchId(), userLevel, result, log);
 		
 		return topicLevel;
 	}
@@ -192,11 +206,11 @@ public class LevelBusiness extends MatchBaseBusiness {
 		UserTopicLevel userLevel = this.userTopic.getUserTopic(userId, topicId);
 		levelList.add(userLevel);
 		
-		if(this.levelStatRedis.checkUserMatch(super.getMatchBase().getMatchId(), userId)) {
+		if(this.levelStatRedis.checkUserLevelMatch(super.getMatchBase().getMatchId(), userId)) {
 			levelList.add(userLevel);
 			return levelList;
 		} else {
-			this.levelStatRedis.writeUserMatch(super.getMatchBase().getMatchId(), userId);
+			this.levelStatRedis.writeUserLevelMatch(super.getMatchBase().getMatchId(), userId);
 		}
 		
 		if(userId.equalsIgnoreCase(firstId)) {

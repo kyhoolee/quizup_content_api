@@ -34,6 +34,13 @@ public class UserRelation {
 		return relation;
 	}
 	
+	public static UserRelation createBlock(String userId, String blockId) {
+		UserRelation relation = new UserRelation(userId, blockId, 
+				UserRelationRedis.RelationType.BLOCK_RELATION);
+		
+		return relation;
+	}
+	
 	
 	public String getUserId() {
 		return userId;

@@ -13,6 +13,10 @@ public class MatchContent {
 	
 	private List<Question> questionList;
 	
+	public MatchContent(List<Question> quesList) {
+		this.questionList = quesList;
+	}
+	
 	public MatchContent() {
 		this.questionList = new ArrayList<Question>();
 		

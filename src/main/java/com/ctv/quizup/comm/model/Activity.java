@@ -15,6 +15,7 @@ public class Activity {
 		private Object subject;
 		private Object action;
 		private Object object;
+		private Object context;
 		
 		
 		
@@ -23,11 +24,12 @@ public class Activity {
 		public Content() {
 			super();
 		}
-		public Content(Object subject, Object action, Object object) {
+		public Content(Object subject, Object action, Object object, Object context) {
 			super();
 			this.subject = subject;
 			this.action = action;
 			this.object = object;
+			this.context = context;
 		}
 		
 		public Object getSubject() {
@@ -56,6 +58,18 @@ public class Activity {
 		}
 		
 
+		/**
+		 * @return the context
+		 */
+		public Object getContext() {
+			return context;
+		}
+		/**
+		 * @param context the context to set
+		 */
+		public void setContext(Object context) {
+			this.context = context;
+		}
 		@Override
 		public String toString(){
 			String result = "";
@@ -83,6 +97,7 @@ public class Activity {
 	
 	private String authorName;
 	private Content content;
+	private String matchId;
 	//private String description;
 	
 	
@@ -219,16 +234,15 @@ public class Activity {
 		return result;
 	}
 	
-	
-	public static void main(String[] args) {
-		Activity act = new Activity();
-		
-		UserBaseInfo user = new UserBaseInfo();
-		
-		act.getContent().setSubject(user);
-		act.getContent().setObject(user);
-		act.getContent().setAction("tie");
-		
-		System.out.println(act.toString());
+
+
+
+	public String getMatchId() {
+		return matchId;
 	}
+
+	public void setMatchId(String matchId) {
+		this.matchId = matchId;
+	}
+
 }

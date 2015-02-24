@@ -158,6 +158,7 @@ public class UserTopicLevelRedis {
 			
 		}
 	}
+	
 
 	public UserTopicLevel getUserTopicLevel(String userId, String topicId) {
 		UserTopicLevel userTopicLevel = new UserTopicLevel(userId, topicId);

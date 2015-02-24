@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.ctv.quizup.user.model.User;
+import com.ctv.quizup.util.JDBCProcess;
 
 
 public class UserSQL {
@@ -55,7 +56,7 @@ public class UserSQL {
 		Statement statement = null;
 		try {
 			System.out.println("start connect");
-			dbConnection = JDBCProcess.getDBConnection();
+			dbConnection = JDBCProcess.getContentDB();
 			statement = dbConnection.createStatement();
 			
 			ResultSet result = statement.executeQuery(sqlStatement);

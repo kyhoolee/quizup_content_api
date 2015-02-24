@@ -1,17 +1,24 @@
 package com.ctv.quizup.comm.business.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import org.codehaus.jackson.map.ObjectMapper;
+
 import com.ctv.quizup.comm.model.Activity;
 import com.ctv.quizup.comm.model.Challenge;
+import com.ctv.quizup.comm.model.Activity.Content;
 import com.ctv.quizup.comm.redis.ActivityRedis;
+import com.ctv.quizup.content.business.TopicProcess;
+import com.ctv.quizup.content.model.Topic;
+import com.ctv.quizup.content.redis.TopicRedis;
 import com.ctv.quizup.match.business.MatchProcess;
 import com.ctv.quizup.match.model.MatchBaseInfo;
 import com.ctv.quizup.match.model.MatchResult;
 import com.ctv.quizup.user.business.impl.UserServiceProcess;
-import com.ctv.quizup.user.model.UserBadgeAchiev;
+import com.ctv.quizup.user.model.BadgeAchiev;
 import com.ctv.quizup.user.model.UserBaseInfo;
 
 public class ActivityProcess {
@@ -106,6 +113,7 @@ public class ActivityProcess {
 		}
 	}
 
+
 	public List<Activity> getMatchActivity(MatchResult matchResult) {
 		List<Activity> actList = new ArrayList<Activity>();
 		MatchProcess matchProcess = new MatchProcess();
@@ -113,7 +121,14 @@ public class ActivityProcess {
 
 		Activity first = new Activity(matchBase.getFirstUserId(), matchResult.getCreatedDate(), ActivityType.MatchResult);
 		Activity second = new Activity(matchBase.getSecondUserId(), matchResult.getCreatedDate(), ActivityType.MatchResult);
-
+		
+		String matchId = matchResult.getMatchId();
+		first.setMatchId(matchId);
+		second.setMatchId(matchId);
+		
+		String topicId = matchBase.getTopicId();
+		TopicRedis topicProcess = new TopicRedis();
+		Topic context = topicProcess.getTopicById(topicId);
 
 		UserServiceProcess userService = new UserServiceProcess();
 		UserBaseInfo firstUser = userService.getUser(first.getAuthorId());
@@ -121,9 +136,11 @@ public class ActivityProcess {
 
 		first.getContent().setSubject(firstUser);
 		first.getContent().setObject(secondUser);
+		first.getContent().setContext(context);
 		
 		second.getContent().setSubject(secondUser);
 		second.getContent().setObject(firstUser);
+		second.getContent().setContext(context);
 		
 		String firstDes = "";//"Bạn thách đấu " + secondUser.getUserName();
 		String secondDes = "";//firstUser.getUserName() + " thách đấu bạn";
@@ -178,7 +195,7 @@ public class ActivityProcess {
 	}
 
 	
-	public Activity getAchievementAcitivty(UserBadgeAchiev achiev) {
+	public Activity getAchievementAcitivty(BadgeAchiev achiev) {
 		Activity activity = null;
 
 		return activity;

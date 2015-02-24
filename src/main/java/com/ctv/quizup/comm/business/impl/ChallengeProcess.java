@@ -2,6 +2,8 @@ package com.ctv.quizup.comm.business.impl;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -15,6 +17,7 @@ import com.ctv.quizup.match.business.MatchProcess;
 import com.ctv.quizup.match.model.MatchBaseInfo;
 import com.ctv.quizup.user.business.impl.UserBaseProcess;
 import com.ctv.quizup.user.business.impl.UserServiceProcess;
+import com.ctv.quizup.user.business.impl.LeaderBoardProcess.TopicUserScore;
 import com.ctv.quizup.user.model.UserBaseInfo;
 import com.ctv.quizup.util.LoggerUtil;
 
@@ -61,6 +64,17 @@ public class ChallengeProcess {
 	public Challenge getChallenge(String challengeId) {
 		Challenge challenge = this.challRedis.getChallengeById(challengeId);
 		
+		/*CHECK CHALLENGE VALID*/
+		String matchId = challenge.getMatchId();
+		if(matchId == null) {
+			return null;
+		}
+		MatchProcess matchProcess = new MatchProcess();
+		MatchBaseInfo base = matchProcess.getMatchBaseInfo(matchId);
+		if(base == null) {
+			return null;
+		}
+		
 		return challenge;
 	}
 	
@@ -73,6 +87,22 @@ public class ChallengeProcess {
 		List<Challenge> challList = new ArrayList<Challenge>();
 		
 		challList = this.challRedis.getReceiverChallenge(userId, Challenge.ChallengeStatus.UNSEEN);
+		
+		Collections.sort(challList, new Comparator<Challenge>() {
+
+			public int compare(Challenge first, Challenge second) {
+				long val1 = first.getCreatedDate().getTime();
+				long val2 = second.getCreatedDate().getTime();
+				
+				if(val1 < val2) 
+					return 1;
+				else if ( val1 == val2) 
+					return 0;
+				else 
+					return -1;
+			}
+			
+		});
 		
 		return challList;
 	}
@@ -189,7 +219,23 @@ public class ChallengeProcess {
 				this.challRedis.removeChallenge(chall.getChallengeId());
 			}
 		}
-		logger.info(challList);
+		//logger.info(challList);
+		
+		Collections.sort(challList, new Comparator<ChallFull>() {
+
+			public int compare(ChallFull first, ChallFull second) {
+				long val1 = first.getCreatedDate().getTime();
+				long val2 = second.getCreatedDate().getTime();
+				
+				if(val1 < val2) 
+					return 1;
+				else if ( val1 == val2) 
+					return 0;
+				else 
+					return -1;
+			}
+			
+		});
 		
 		return challList;
 	}
@@ -259,7 +305,8 @@ public class ChallengeProcess {
 		if(chall == null)
 			return chall;
 		this.challRedis.removeChallenge(challengeId);
-		this.challRedis.deleteUserChallenge(challengeId, chall.getUserId(), chall.getStatus());
+		this.challRedis.deleteSenderChallenge(challengeId, chall.getUserId(), chall.getStatus());
+		this.challRedis.deleteReceiverChallenge(challengeId, chall.getRivalId(), chall.getStatus());
 		
 		return chall;
 		

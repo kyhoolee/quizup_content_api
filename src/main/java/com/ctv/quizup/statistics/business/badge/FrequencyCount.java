@@ -1,10 +1,15 @@
 package com.ctv.quizup.statistics.business.badge;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.ctv.quizup.match.model.MatchQuestionLog;
 import com.ctv.quizup.statistics.business.BadgeBusiness;
-import com.ctv.quizup.user.model.UserBadgeAchiev;
+import com.ctv.quizup.user.model.Badge;
+import com.ctv.quizup.user.model.BadgeAchiev;
+import com.ctv.quizup.user.model.BadgeCountInfo;
 import com.ctv.quizup.user.model.BadgeCountInfo.CountType;
 
 public class FrequencyCount extends BaseCount {
@@ -30,123 +35,92 @@ public class FrequencyCount extends BaseCount {
 		String topicId = this.getBadgeBusiness().getMatchBase().getTopicId();
 
 		int result = this.getBadgeBusiness().getMatchResult().getResult();
-
-	}
-	
-	public void countCounterMatch(String firstId, String secondId, 
-			List<MatchQuestionLog> firstLog, List<MatchQuestionLog> secondLog) {
 		
-		int firstPoint = 0;
-		int secondPoint = 0;
-		
-		for(int i = 0 ; i < firstLog.size() - 1 ; i ++) {
-			firstPoint += firstLog.get(i).getPoint();
-			secondPoint += secondLog.get(i).getPoint();
-		}
-		
-		if(firstPoint < secondPoint) {
-			firstPoint += firstLog.get(firstLog.size() - 1).getPoint();
-			secondPoint += secondLog.get(secondLog.size() - 1).getPoint();
-			
-			if(secondPoint < firstPoint) {
-				this.countCounterAnswer(firstId);
-			}
-		} else {
-			firstPoint += firstLog.get(firstLog.size() - 1).getPoint();
-			secondPoint += secondLog.get(secondLog.size() - 1).getPoint();
-			
-			if(secondPoint > firstPoint) {
-				this.countCounterAnswer(secondId);
-			}
-		}
-		
-	}
-	
-	public int countByAnswerCase(String userId, List<MatchQuestionLog> log) {
-		int anCase = 0;
-		
-		int numAnswer = 0;
-		for(MatchQuestionLog ques : log) {
-			if(ques.getPoint() > 0) {
-				numAnswer ++;
-			}
-		}
-		
-		switch(numAnswer) {
-		case 0 :
-			this.countZeroAnswer(userId);
-			break;
+		switch (result) {
 		case 1 :
-			this.countOneAnswer(userId);
+			this.countSuperMan(firstId);
+			this.resetSuperMan(secondId);
 			break;
-		case 5 :
-			this.countGoodAnswer(userId);
+		case 0 :
+			this.resetSuperMan(firstId);
+			this.resetSuperMan(secondId);
 			break;
-		case 6 :
-			this.countGoodAnswer(userId);
+		case -1:
+			this.countSuperMan(secondId);
+			this.resetSuperMan(firstId);
 			break;
-		case 7 :
-			this.countGoodAnswer(userId);
-			this.countPerfectAnswer(userId);
-			break;
-		
-		}
-		
-		return anCase;
-	}
-
-	public void countUserMatchBadge(String userId, int answerCase) {
-		
-		switch (answerCase) {
-		case 0:
-			// Count zero-answer-match
-			this.countZeroAnswer(userId);
-			break;
-		case 1:
-			// Count one-answer-match
-			this.countOneAnswer(userId);
-			break;
-		case 2:
-			// Count good-match
-			this.countGoodAnswer(userId);
-			break;
-		case 3:
-			// Count perfect-match
-			this.countPerfectAnswer(userId);
-			break;
-		case 4:
-			// Count counter-answer-match
-			this.countCounterAnswer(userId);
-			break;
-			
-		
 		}
 
-	}
-
-	public void countZeroAnswer(String userId) {
-		this.countBadge(userId, CountType.Match_0_Answer);
-	}
-
-	public void countOneAnswer(String userId) {
-		this.countBadge(userId, CountType.Match_1_Answer);
-	}
-
-	public void countGoodAnswer(String userId) {
-		this.countBadge(userId, CountType.Match_Good);
-	}
-
-	public void countPerfectAnswer(String userId) {
-		this.countBadge(userId, CountType.Match_Perfect);
 	}
 	
-	public void countCounterAnswer(String userId) {
-		this.countBadge(userId, CountType.Match_Counter);
+
+
+
+
+
+	public void resetSuperMan(String userId) {
+		this.resetBadge(userId, CountType.Frequent_Win);
 	}
+	public void countSuperMan(String userId) {
+		this.countBadge(userId, CountType.Frequent_Win);
+	}
+	public List<BadgeAchiev> countSuperBadge(String userId) {
+		return this.countAchievBadge(userId, CountType.Frequent_Win);
+	}
+	
+
+	public void resetLoop(String userId) {
+		this.resetBadge(userId, CountType.Frequent_Answer);
+	}
+	public void countLoop(String userId) {
+		this.countBadge(userId, CountType.Frequent_Answer);
+	}
+	public List<BadgeAchiev> countLoopBadge(String userId) {
+		return this.countAchievBadge(userId, CountType.Frequent_Answer);
+	}
+	
+	
 
 	@Override
-	public List<UserBadgeAchiev> countBadge() {
+	public List<BadgeAchiev> countBadge() {
 
+		return null;
+	}
+
+
+	@Override
+	public Map<String, List<BadgeAchiev>> countUserBadge() {
+		Map<String, List<BadgeAchiev>> badges = new HashMap<String, List<BadgeAchiev>>();
+		
+		List<BadgeAchiev> first = new ArrayList<BadgeAchiev>();
+		List<BadgeAchiev> second = new ArrayList<BadgeAchiev>();
+		
+		String firstId = this.getBadgeBusiness().getMatchBase()
+				.getFirstUserId();
+
+		String secondId = this.getBadgeBusiness().getMatchBase()
+				.getSecondUserId();
+
+		int result = this.getBadgeBusiness().getMatchResult().getResult();
+		
+		switch (result) {
+		case 1 :
+			first.addAll(this.countSuperBadge(firstId));
+			this.resetSuperMan(secondId);
+			break;
+		case 0 :
+			this.resetSuperMan(firstId);
+			this.resetSuperMan(secondId);
+			break;
+		case -1:
+			second.addAll(this.countSuperBadge(secondId));
+			this.resetSuperMan(firstId);
+			break;
+		}
+		
+		badges.put(firstId, first);
+		badges.put(secondId, second);
+		
 		return null;
 	}
 

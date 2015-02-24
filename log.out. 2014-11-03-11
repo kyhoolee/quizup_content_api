@@ -1,0 +1,110 @@
+Get connection for route {}->http://123.30.210.5
+Connecting to 123.30.210.5:80
+CookieSpec selected: best-match
+Auth cache not set in the context
+Target auth state: UNCHALLENGED
+Proxy auth state: UNCHALLENGED
+Attempt 1 to execute request
+Sending request: GET /account/v0.0/user/727126420669934/profile HTTP/1.1
+ >> "GET /account/v0.0/user/727126420669934/profile HTTP/1.1[\r][\n]"
+ >> "Host: 123.30.210.5[\r][\n]"
+ >> "Connection: Keep-Alive[\r][\n]"
+ >> "User-Agent: Apache-HttpClient/4.3.1 (java 1.5)[\r][\n]"
+ >> "[\r][\n]"
+>> GET /account/v0.0/user/727126420669934/profile HTTP/1.1
+>> Host: 123.30.210.5
+>> Connection: Keep-Alive
+>> User-Agent: Apache-HttpClient/4.3.1 (java 1.5)
+ << "HTTP/1.1 404 Not Found[\r][\n]"
+ << "Date: Mon, 03 Nov 2014 04:40:53 GMT[\r][\n]"
+ << "Server: Apache/2.2.15 (CentOS)[\r][\n]"
+ << "Content-Type: text/html; charset=iso-8859-1[\r][\n]"
+ << "X-Varnish: 162833[\r][\n]"
+ << "Age: 0[\r][\n]"
+ << "Via: 1.1 varnish-v4[\r][\n]"
+ << "Transfer-Encoding: chunked[\r][\n]"
+ << "Connection: keep-alive[\r][\n]"
+ << "[\r][\n]"
+Receiving response: HTTP/1.1 404 Not Found
+<< HTTP/1.1 404 Not Found
+<< Date: Mon, 03 Nov 2014 04:40:53 GMT
+<< Server: Apache/2.2.15 (CentOS)
+<< Content-Type: text/html; charset=iso-8859-1
+<< X-Varnish: 162833
+<< Age: 0
+<< Via: 1.1 varnish-v4
+<< Transfer-Encoding: chunked
+<< Connection: keep-alive
+Connection can be kept alive indefinitely
+ << "0013d[\r][\n]"
+ << "<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">[\n]"
+ << "<html><head>[\n]"
+ << "<title>404 Not Found</title>[\n]"
+ << "</head><body>[\n]"
+ << "<h1>Not Found</h1>[\n]"
+ << "<p>The requested URL /account/v0.0/user/727126420669934/profile was not found on this server.</p>[\n]"
+ << "<hr>[\n]"
+ << "<address>Apache/2.2.15 (CentOS) Server at 123.30.210.5 Port 80</address>[\n]"
+ << "</body></html>[\n]"
+ << "[\r][\n]"
+ << "0[\r][\n]"
+ << "[\r][\n]"
+Releasing connection org.apache.http.impl.conn.ManagedClientConnectionImpl@25ecaa1f
+Connection can be kept alive indefinitely
+Get connection for route {}->http://123.30.210.5
+Connecting to 123.30.210.5:80
+CookieSpec selected: best-match
+Auth cache not set in the context
+Target auth state: UNCHALLENGED
+Proxy auth state: UNCHALLENGED
+Attempt 1 to execute request
+Sending request: GET /account/v0.0/api/user/727126420669934/profile HTTP/1.1
+ >> "GET /account/v0.0/api/user/727126420669934/profile HTTP/1.1[\r][\n]"
+ >> "Host: 123.30.210.5[\r][\n]"
+ >> "Connection: Keep-Alive[\r][\n]"
+ >> "User-Agent: Apache-HttpClient/4.3.1 (java 1.5)[\r][\n]"
+ >> "[\r][\n]"
+>> GET /account/v0.0/api/user/727126420669934/profile HTTP/1.1
+>> Host: 123.30.210.5
+>> Connection: Keep-Alive
+>> User-Agent: Apache-HttpClient/4.3.1 (java 1.5)
+ << "HTTP/1.1 404 Not Found[\r][\n]"
+ << "Date: Mon, 03 Nov 2014 04:54:02 GMT[\r][\n]"
+ << "Server: Apache/2.2.15 (CentOS)[\r][\n]"
+ << "Content-Type: text/html; charset=iso-8859-1[\r][\n]"
+ << "X-Varnish: 447728[\r][\n]"
+ << "Age: 0[\r][\n]"
+ << "Via: 1.1 varnish-v4[\r][\n]"
+ << "Transfer-Encoding: chunked[\r][\n]"
+ << "Connection: keep-alive[\r][\n]"
+ << "[\r][\n]"
+Receiving response: HTTP/1.1 404 Not Found
+<< HTTP/1.1 404 Not Found
+<< Date: Mon, 03 Nov 2014 04:54:02 GMT
+<< Server: Apache/2.2.15 (CentOS)
+<< Content-Type: text/html; charset=iso-8859-1
+<< X-Varnish: 447728
+<< Age: 0
+<< Via: 1.1 varnish-v4
+<< Transfer-Encoding: chunked
+<< Connection: keep-alive
+Connection can be kept alive indefinitely
+ << "00141[\r][\n]"
+ << "<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">[\n]"
+ << "<html><head>[\n]"
+ << "<title>404 Not Found</title>[\n]"
+ << "</head><body>[\n]"
+ << "<h1>Not Found</h1>[\n]"
+ << "<p>The requested URL /account/v0.0/api/user/727126420669934/profile was not found on this server.</p>[\n]"
+ << "<hr>[\n]"
+ << "<address>Apache/2.2.15 (CentOS) Server at 123.30.210.5 Port 80</address>[\n]"
+ << "</body></html>[\n]"
+ << "[\r][\n]"
+ << "0[\r][\n]"
+ << "[\r][\n]"
+Releasing connection org.apache.http.impl.conn.ManagedClientConnectionImpl@b9f370
+Connection can be kept alive indefinitely
+Get connection for route {}->http://123.30.210.5:8890
+Connecting to 123.30.210.5:8890
+Get connection for route {}->http://123.30.210.5:8890
+Connecting to 123.30.210.5:8890

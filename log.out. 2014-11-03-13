@@ -1,0 +1,35 @@
+Get connection for route {}->http://123.30.210.5:8890
+Connecting to 123.30.210.5:8890
+CookieSpec selected: best-match
+Auth cache not set in the context
+Target auth state: UNCHALLENGED
+Proxy auth state: UNCHALLENGED
+Attempt 1 to execute request
+Sending request: GET /account/v0.0/api/user/727126420669934/profile HTTP/1.1
+ >> "GET /account/v0.0/api/user/727126420669934/profile HTTP/1.1[\r][\n]"
+ >> "User-Agent: Mozilla/5.0[\r][\n]"
+ >> "Host: 123.30.210.5:8890[\r][\n]"
+ >> "Connection: Keep-Alive[\r][\n]"
+ >> "[\r][\n]"
+>> GET /account/v0.0/api/user/727126420669934/profile HTTP/1.1
+>> User-Agent: Mozilla/5.0
+>> Host: 123.30.210.5:8890
+>> Connection: Keep-Alive
+ << "HTTP/1.1 200 OK[\r][\n]"
+ << "Content-Type: application/json[\r][\n]"
+ << "Transfer-Encoding: chunked[\r][\n]"
+ << "Server: Jetty(9.2.2.v20140723)[\r][\n]"
+ << "[\r][\n]"
+Receiving response: HTTP/1.1 200 OK
+<< HTTP/1.1 200 OK
+<< Content-Type: application/json
+<< Transfer-Encoding: chunked
+<< Server: Jetty(9.2.2.v20140723)
+Connection can be kept alive indefinitely
+ << "1D9[\r][\n]"
+ << "{"code":200,"user":{"avartarUrl":"https://fbcdn-profile-a.akamaihd.net/hprofile-ak-xpa1/v/t1.0-1/p200x200/1379999_745019065547336_3560903362603215664_n.jpg?oh=89bb1d5505d3e84cfebdbfa8b19e7f5f&oe=54DD2507&__gda__=1425513272_bb46626844bd59c5ccea9ef0773f4365","coverUrl":"https://fbcdn-sphotos-a-a.akamaihd.net/hphotos-ak-xaf1/t31.0-8/s720x720/10498325_705815189467724_4517974491211987881_o.jpg","firstName":"Huu","middleName":null,"lastName":"NC","name":"Huu NC"},"status":3}"
+ << "[\r][\n]"
+ << "0[\r][\n]"
+ << "[\r][\n]"
+Releasing connection org.apache.http.impl.conn.ManagedClientConnectionImpl@34e51ca2
+Connection can be kept alive indefinitely

@@ -14,13 +14,14 @@ public class MatchQuestionLog {
 	private String playerId;
 	
 	private int point = 0;
+	private int time = 0;
 	
 	private String answerContent;
 	
 	private Date createdDate;
 	
 	
-	public MatchQuestionLog(String matchId, String questionId, int questionOrder, String playerId, int point) {
+	public MatchQuestionLog(String matchId, String questionId, int questionOrder, String playerId, int point, int time) {
 		this.matchId = matchId;
 		this.questionId = questionId;
 		this.questionOrder = questionOrder;
@@ -34,8 +35,8 @@ public class MatchQuestionLog {
 		this.createdDate = new Date();
 	}
 	
-	public static MatchQuestionLog createQuestionLog(String matchId, String questionId, int questionOrder, String playerId, int point) {
-		MatchQuestionLog log = new MatchQuestionLog(matchId, questionId, questionOrder, playerId, point);
+	public static MatchQuestionLog createQuestionLog(String matchId, String questionId, int questionOrder, String playerId, int point, int time) {
+		MatchQuestionLog log = new MatchQuestionLog(matchId, questionId, questionOrder, playerId, point, time);
 		
 		
 		return log;
@@ -101,6 +102,20 @@ public class MatchQuestionLog {
 
 	public void setAnswerContent(String answerContent) {
 		this.answerContent = answerContent;
+	}
+
+	/**
+	 * @return the time
+	 */
+	public int getTime() {
+		return time;
+	}
+
+	/**
+	 * @param time the time to set
+	 */
+	public void setTime(int time) {
+		this.time = time;
 	}
 
 	

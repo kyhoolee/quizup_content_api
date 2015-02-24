@@ -10,7 +10,7 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.exceptions.JedisConnectionException;
 
 import com.ctv.quizup.redis.RedisPool;
-import com.ctv.quizup.user.model.UserBadgeAchiev;
+import com.ctv.quizup.user.model.BadgeAchiev;
 import com.ctv.quizup.user.redis.UserBadgeAchievRedis;
 import com.ctv.quizup.util.LoggerUtil;
 
@@ -30,7 +30,7 @@ public class UserBadgeStatRedis {
 		return USER_ACHIEVEMENT_HASHES_KEY + "userId";
 	}
 	
-	public void updateUserBadge(UserBadgeAchiev achiev) {
+	public void updateUserBadge(BadgeAchiev achiev) {
 		this.writeUserBadgeAchievementToRedis(achiev.toString(), achiev.getBadgeId() , achiev.getUserId());
 	}
 	
@@ -46,12 +46,12 @@ public class UserBadgeStatRedis {
 		this.badgeAchiev.writeUserBadgeAchievementToRedis(userBadgeAchievementJSON, badgeId, userId);
 	}
 	
-	public UserBadgeAchiev getUserAchievement(String userId, String badgeId) {
+	public BadgeAchiev getUserAchievement(String userId, String badgeId) {
 		return this.badgeAchiev.getUserAchievement(userId, badgeId);
 		
 	}
 
-	public List<UserBadgeAchiev> getUserAchievementByUserId(String userId) {
+	public List<BadgeAchiev> getUserAchievementByUserId(String userId) {
 		return this.badgeAchiev.getUserAchievementByUserId(userId);
 	}
 }

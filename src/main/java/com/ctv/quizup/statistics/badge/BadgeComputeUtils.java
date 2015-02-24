@@ -3,7 +3,7 @@ package com.ctv.quizup.statistics.badge;
 import com.ctv.quizup.statistics.badge.BadgeComputeContext.BadgeContext;
 import com.ctv.quizup.statistics.badge.BadgeComputeContext.BadgeRequest;
 import com.ctv.quizup.statistics.badge.BadgeComputeContext.BadgeVisitor;
-import com.ctv.quizup.user.model.UserBadgeAchiev;
+import com.ctv.quizup.user.model.BadgeAchiev;
 
 public class BadgeComputeUtils {
 	public static final String BADGE_NEWMEMBER = "new_member";
@@ -32,7 +32,7 @@ public class BadgeComputeUtils {
 	// HUY HIỆU THÀNH VIÊN MỚI
 	// ////////////////////////////////////////////////////////////////////////////
 	
-	public static UserBadgeAchiev updateNewMember(UserBadgeAchiev badgeAchiev) {
+	public static BadgeAchiev updateNewMember(BadgeAchiev badgeAchiev) {
 
 		return badgeAchiev;
 	}
@@ -41,7 +41,7 @@ public class BadgeComputeUtils {
 	 * @param badgeAchiev
 	 * @return
 	 */
-	public static UserBadgeAchiev updateIncrNewMember(UserBadgeAchiev badgeAchiev) {
+	public static BadgeAchiev updateIncrNewMember(BadgeAchiev badgeAchiev) {
 		badgeAchiev = BadgeComputeContext.checkIncrBadgeProgress(
 				badgeAchiev,
 				BadgeComputeUtils.BADGE_NEWMEMBER,
@@ -52,18 +52,18 @@ public class BadgeComputeUtils {
 	
 	public static class VisitNewMember implements BadgeVisitor {
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev) {
+		public BadgeAchiev visitBadge(BadgeAchiev achiev) {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev,
+		public BadgeAchiev visitBadge(BadgeAchiev achiev,
 				BadgeContext context) {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev,
+		public BadgeAchiev visitBadge(BadgeAchiev achiev,
 				BadgeContext context, BadgeRequest request) {
 			// TODO Auto-generated method stub
 			return null;
@@ -74,7 +74,7 @@ public class BadgeComputeUtils {
 	// ////////////////////////////////////////////////////////////////////////////
 	// HUY HIỆU RÙA
 	// ////////////////////////////////////////////////////////////////////////////
-	public static UserBadgeAchiev updateTurtle(UserBadgeAchiev badgeAchiev) {
+	public static BadgeAchiev updateTurtle(BadgeAchiev badgeAchiev) {
 
 		return badgeAchiev;
 	}
@@ -84,7 +84,7 @@ public class BadgeComputeUtils {
 	 * @param badgeAchiev
 	 * @return
 	 */
-	public static UserBadgeAchiev updateIncrTurtle(UserBadgeAchiev badgeAchiev) {
+	public static BadgeAchiev updateIncrTurtle(BadgeAchiev badgeAchiev) {
 		badgeAchiev = BadgeComputeContext.checkIncrBadgeProgress(
 				badgeAchiev,
 				BadgeComputeUtils.BADGE_TURTLE,
@@ -94,18 +94,18 @@ public class BadgeComputeUtils {
 	
 	public static class VisitTurtle implements BadgeVisitor {
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev) {
+		public BadgeAchiev visitBadge(BadgeAchiev achiev) {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev,
+		public BadgeAchiev visitBadge(BadgeAchiev achiev,
 				BadgeContext context) {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev,
+		public BadgeAchiev visitBadge(BadgeAchiev achiev,
 				BadgeContext context, BadgeRequest request) {
 			// TODO Auto-generated method stub
 			return null;
@@ -115,7 +115,7 @@ public class BadgeComputeUtils {
 	// ////////////////////////////////////////////////////////////////////////////
 	// HUY HIỆU ĐEN TOÀN TẬP
 	// ////////////////////////////////////////////////////////////////////////////
-	public static UserBadgeAchiev updateTotalBlack(UserBadgeAchiev badgeAchiev) {
+	public static BadgeAchiev updateTotalBlack(BadgeAchiev badgeAchiev) {
 
 		return badgeAchiev;
 	}
@@ -124,7 +124,7 @@ public class BadgeComputeUtils {
 	 * @param badgeAchiev
 	 * @return
 	 */
-	public static UserBadgeAchiev updateIncrTotalBlack(UserBadgeAchiev badgeAchiev) {
+	public static BadgeAchiev updateIncrTotalBlack(BadgeAchiev badgeAchiev) {
 		badgeAchiev = BadgeComputeContext.checkIncrBadgeProgress(
 				badgeAchiev,
 				BadgeComputeUtils.BADGE_TOTALBLACK,
@@ -133,18 +133,18 @@ public class BadgeComputeUtils {
 	}
 	public static class VisitTotalBlack implements BadgeVisitor {
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev) {
+		public BadgeAchiev visitBadge(BadgeAchiev achiev) {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev,
+		public BadgeAchiev visitBadge(BadgeAchiev achiev,
 				BadgeContext context) {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev,
+		public BadgeAchiev visitBadge(BadgeAchiev achiev,
 				BadgeContext context, BadgeRequest request) {
 			// TODO Auto-generated method stub
 			return null;
@@ -154,7 +154,7 @@ public class BadgeComputeUtils {
 	// ////////////////////////////////////////////////////////////////////////////
 	// HUY HIỆU VÒNG LẶP 
 	// ////////////////////////////////////////////////////////////////////////////
-	public static UserBadgeAchiev updateLoop(UserBadgeAchiev badgeAchiev) {
+	public static BadgeAchiev updateLoop(BadgeAchiev badgeAchiev) {
 
 		return badgeAchiev;
 	}
@@ -163,7 +163,7 @@ public class BadgeComputeUtils {
 	 * @param badgeAchiev
 	 * @return
 	 */
-	public static UserBadgeAchiev updateIncrLoop(UserBadgeAchiev badgeAchiev) {
+	public static BadgeAchiev updateIncrLoop(BadgeAchiev badgeAchiev) {
 		badgeAchiev = BadgeComputeContext.checkIncrBadgeProgress(
 				badgeAchiev,
 				BadgeComputeUtils.BADGE_LOOP,
@@ -172,18 +172,18 @@ public class BadgeComputeUtils {
 	}
 	public static class VisitLoop implements BadgeVisitor {
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev) {
+		public BadgeAchiev visitBadge(BadgeAchiev achiev) {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev,
+		public BadgeAchiev visitBadge(BadgeAchiev achiev,
 				BadgeContext context) {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev,
+		public BadgeAchiev visitBadge(BadgeAchiev achiev,
 				BadgeContext context, BadgeRequest request) {
 			// TODO Auto-generated method stub
 			return null;
@@ -193,7 +193,7 @@ public class BadgeComputeUtils {
 	// ////////////////////////////////////////////////////////////////////////////
 	// HUY HIỆU MÁY BAY CHIẾN ĐẤU
 	// ////////////////////////////////////////////////////////////////////////////
-	public static UserBadgeAchiev updateFlight(UserBadgeAchiev badgeAchiev) {
+	public static BadgeAchiev updateFlight(BadgeAchiev badgeAchiev) {
 
 		return badgeAchiev;
 	}
@@ -202,7 +202,7 @@ public class BadgeComputeUtils {
 	 * @param badgeAchiev
 	 * @return
 	 */
-	public static UserBadgeAchiev updateIncrFlight(UserBadgeAchiev badgeAchiev) {
+	public static BadgeAchiev updateIncrFlight(BadgeAchiev badgeAchiev) {
 		badgeAchiev = BadgeComputeContext.checkIncrBadgeProgress(
 				badgeAchiev,
 				BadgeComputeUtils.BADGE_FLIGHT,
@@ -211,18 +211,18 @@ public class BadgeComputeUtils {
 	}
 	public static class VisitFlight implements BadgeVisitor {
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev) {
+		public BadgeAchiev visitBadge(BadgeAchiev achiev) {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev,
+		public BadgeAchiev visitBadge(BadgeAchiev achiev,
 				BadgeContext context) {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev,
+		public BadgeAchiev visitBadge(BadgeAchiev achiev,
 				BadgeContext context, BadgeRequest request) {
 			// TODO Auto-generated method stub
 			return null;
@@ -232,7 +232,7 @@ public class BadgeComputeUtils {
 	// ////////////////////////////////////////////////////////////////////////////
 	// HUY HIỆU BẬC THẦY
 	// ////////////////////////////////////////////////////////////////////////////
-	public static UserBadgeAchiev updateMaster(UserBadgeAchiev badgeAchiev) {
+	public static BadgeAchiev updateMaster(BadgeAchiev badgeAchiev) {
 
 		return badgeAchiev;
 	}
@@ -241,7 +241,7 @@ public class BadgeComputeUtils {
 	 * @param badgeAchiev
 	 * @return
 	 */
-	public static UserBadgeAchiev updateIncrMaster(UserBadgeAchiev badgeAchiev) {
+	public static BadgeAchiev updateIncrMaster(BadgeAchiev badgeAchiev) {
 		badgeAchiev = BadgeComputeContext.checkIncrBadgeProgress(
 				badgeAchiev,
 				BadgeComputeUtils.BADGE_MASTER,
@@ -250,18 +250,18 @@ public class BadgeComputeUtils {
 	}
 	public static class VisitMaster implements BadgeVisitor {
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev) {
+		public BadgeAchiev visitBadge(BadgeAchiev achiev) {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev,
+		public BadgeAchiev visitBadge(BadgeAchiev achiev,
 				BadgeContext context) {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev,
+		public BadgeAchiev visitBadge(BadgeAchiev achiev,
 				BadgeContext context, BadgeRequest request) {
 			// TODO Auto-generated method stub
 			return null;
@@ -271,7 +271,7 @@ public class BadgeComputeUtils {
 	// ////////////////////////////////////////////////////////////////////////////
 	// HUY HIỆU BỀN VỮNG
 	// ////////////////////////////////////////////////////////////////////////////
-	public static UserBadgeAchiev updateStable(UserBadgeAchiev badgeAchiev) {
+	public static BadgeAchiev updateStable(BadgeAchiev badgeAchiev) {
 
 		return badgeAchiev;
 	}
@@ -280,7 +280,7 @@ public class BadgeComputeUtils {
 	 * @param badgeAchiev
 	 * @return
 	 */
-	public static UserBadgeAchiev updateIncrStable(UserBadgeAchiev badgeAchiev) {
+	public static BadgeAchiev updateIncrStable(BadgeAchiev badgeAchiev) {
 		badgeAchiev = BadgeComputeContext.checkIncrBadgeProgress(
 				badgeAchiev,
 				BadgeComputeUtils.BADGE_STABLE,
@@ -289,18 +289,18 @@ public class BadgeComputeUtils {
 	}
 	public static class VisitStable implements BadgeVisitor {
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev) {
+		public BadgeAchiev visitBadge(BadgeAchiev achiev) {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev,
+		public BadgeAchiev visitBadge(BadgeAchiev achiev,
 				BadgeContext context) {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev,
+		public BadgeAchiev visitBadge(BadgeAchiev achiev,
 				BadgeContext context, BadgeRequest request) {
 			// TODO Auto-generated method stub
 			return null;
@@ -310,7 +310,7 @@ public class BadgeComputeUtils {
 	// ////////////////////////////////////////////////////////////////////////////
 	// HUY HIỆU NHÀ THƠ
 	// ////////////////////////////////////////////////////////////////////////////
-	public static UserBadgeAchiev updatePoem(UserBadgeAchiev badgeAchiev) {
+	public static BadgeAchiev updatePoem(BadgeAchiev badgeAchiev) {
 
 		return badgeAchiev;
 	}
@@ -319,7 +319,7 @@ public class BadgeComputeUtils {
 	 * @param badgeAchiev
 	 * @return
 	 */
-	public static UserBadgeAchiev updateIncrPoem(UserBadgeAchiev badgeAchiev) {
+	public static BadgeAchiev updateIncrPoem(BadgeAchiev badgeAchiev) {
 		badgeAchiev = BadgeComputeContext.checkIncrBadgeProgress(
 				badgeAchiev,
 				BadgeComputeUtils.BADGE_TOTALBLACK,
@@ -328,18 +328,18 @@ public class BadgeComputeUtils {
 	}
 	public static class VisitPoem implements BadgeVisitor {
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev) {
+		public BadgeAchiev visitBadge(BadgeAchiev achiev) {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev,
+		public BadgeAchiev visitBadge(BadgeAchiev achiev,
 				BadgeContext context) {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev,
+		public BadgeAchiev visitBadge(BadgeAchiev achiev,
 				BadgeContext context, BadgeRequest request) {
 			// TODO Auto-generated method stub
 			return null;
@@ -349,7 +349,7 @@ public class BadgeComputeUtils {
 	// ////////////////////////////////////////////////////////////////////////////
 	// HUY HIỆU BẢN ĐỒ
 	// ////////////////////////////////////////////////////////////////////////////
-	public static UserBadgeAchiev updateAtlas(UserBadgeAchiev badgeAchiev) {
+	public static BadgeAchiev updateAtlas(BadgeAchiev badgeAchiev) {
 
 		return badgeAchiev;
 	}
@@ -358,7 +358,7 @@ public class BadgeComputeUtils {
 	 * @param badgeAchiev
 	 * @return
 	 */
-	public static UserBadgeAchiev updateIncrAtlas(UserBadgeAchiev badgeAchiev) {
+	public static BadgeAchiev updateIncrAtlas(BadgeAchiev badgeAchiev) {
 		badgeAchiev = BadgeComputeContext.checkIncrBadgeProgress(
 				badgeAchiev,
 				BadgeComputeUtils.BADGE_TOTALBLACK,
@@ -367,18 +367,18 @@ public class BadgeComputeUtils {
 	}
 	public static class VisitAtlas implements BadgeVisitor {
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev) {
+		public BadgeAchiev visitBadge(BadgeAchiev achiev) {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev,
+		public BadgeAchiev visitBadge(BadgeAchiev achiev,
 				BadgeContext context) {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev,
+		public BadgeAchiev visitBadge(BadgeAchiev achiev,
 				BadgeContext context, BadgeRequest request) {
 			// TODO Auto-generated method stub
 			return null;
@@ -388,7 +388,7 @@ public class BadgeComputeUtils {
 	// ////////////////////////////////////////////////////////////////////////////
 	// HUY HIỆU BÁC HỌC
 	// ////////////////////////////////////////////////////////////////////////////
-	public static UserBadgeAchiev updateProfessor(UserBadgeAchiev badgeAchiev) {
+	public static BadgeAchiev updateProfessor(BadgeAchiev badgeAchiev) {
 
 		return badgeAchiev;
 	}
@@ -397,7 +397,7 @@ public class BadgeComputeUtils {
 	 * @param badgeAchiev
 	 * @return
 	 */
-	public static UserBadgeAchiev updateIncrProfessor(UserBadgeAchiev badgeAchiev) {
+	public static BadgeAchiev updateIncrProfessor(BadgeAchiev badgeAchiev) {
 		badgeAchiev = BadgeComputeContext.checkIncrBadgeProgress(
 				badgeAchiev,
 				BadgeComputeUtils.BADGE_PROFESSOR,
@@ -406,18 +406,18 @@ public class BadgeComputeUtils {
 	}
 	public static class VisitProfessor implements BadgeVisitor {
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev) {
+		public BadgeAchiev visitBadge(BadgeAchiev achiev) {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev,
+		public BadgeAchiev visitBadge(BadgeAchiev achiev,
 				BadgeContext context) {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev,
+		public BadgeAchiev visitBadge(BadgeAchiev achiev,
 				BadgeContext context, BadgeRequest request) {
 			// TODO Auto-generated method stub
 			return null;
@@ -427,7 +427,7 @@ public class BadgeComputeUtils {
 	// ////////////////////////////////////////////////////////////////////////////
 	// HUY HIỆU THIỀN SƯ
 	// ////////////////////////////////////////////////////////////////////////////
-	public static UserBadgeAchiev updateZen(UserBadgeAchiev badgeAchiev) {
+	public static BadgeAchiev updateZen(BadgeAchiev badgeAchiev) {
 
 		return badgeAchiev;
 	}
@@ -436,7 +436,7 @@ public class BadgeComputeUtils {
 	 * @param badgeAchiev
 	 * @return
 	 */
-	public static UserBadgeAchiev updateIncrZen(UserBadgeAchiev badgeAchiev) {
+	public static BadgeAchiev updateIncrZen(BadgeAchiev badgeAchiev) {
 		badgeAchiev = BadgeComputeContext.checkIncrBadgeProgress(
 				badgeAchiev,
 				BadgeComputeUtils.BADGE_ZEN,
@@ -445,18 +445,18 @@ public class BadgeComputeUtils {
 	}
 	public static class VisitZen implements BadgeVisitor {
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev) {
+		public BadgeAchiev visitBadge(BadgeAchiev achiev) {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev,
+		public BadgeAchiev visitBadge(BadgeAchiev achiev,
 				BadgeContext context) {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev,
+		public BadgeAchiev visitBadge(BadgeAchiev achiev,
 				BadgeContext context, BadgeRequest request) {
 			// TODO Auto-generated method stub
 			return null;
@@ -466,7 +466,7 @@ public class BadgeComputeUtils {
 	// ////////////////////////////////////////////////////////////////////////////
 	// HUY HIỆU CỰU CHIẾN BINH
 	// ////////////////////////////////////////////////////////////////////////////
-	public static UserBadgeAchiev updateOldSoldier(UserBadgeAchiev badgeAchiev) {
+	public static BadgeAchiev updateOldSoldier(BadgeAchiev badgeAchiev) {
 
 		return badgeAchiev;
 	}
@@ -475,7 +475,7 @@ public class BadgeComputeUtils {
 	 * @param badgeAchiev
 	 * @return
 	 */
-	public static UserBadgeAchiev updateIncrOldSoldier(UserBadgeAchiev badgeAchiev) {
+	public static BadgeAchiev updateIncrOldSoldier(BadgeAchiev badgeAchiev) {
 		badgeAchiev = BadgeComputeContext.checkIncrBadgeProgress(
 				badgeAchiev,
 				BadgeComputeUtils.BADGE_OLDSOLDIER,
@@ -484,18 +484,18 @@ public class BadgeComputeUtils {
 	}
 	public static class VisitOldSoldier implements BadgeVisitor {
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev) {
+		public BadgeAchiev visitBadge(BadgeAchiev achiev) {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev,
+		public BadgeAchiev visitBadge(BadgeAchiev achiev,
 				BadgeContext context) {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev,
+		public BadgeAchiev visitBadge(BadgeAchiev achiev,
 				BadgeContext context, BadgeRequest request) {
 			// TODO Auto-generated method stub
 			return null;
@@ -505,7 +505,7 @@ public class BadgeComputeUtils {
 	// ////////////////////////////////////////////////////////////////////////////
 	// HUY HIỆU THẦN ĐỒNG
 	// ////////////////////////////////////////////////////////////////////////////
-	public static UserBadgeAchiev updateGenius(UserBadgeAchiev badgeAchiev) {
+	public static BadgeAchiev updateGenius(BadgeAchiev badgeAchiev) {
 
 		return badgeAchiev;
 	}
@@ -514,7 +514,7 @@ public class BadgeComputeUtils {
 	 * @param badgeAchiev
 	 * @return
 	 */
-	public static UserBadgeAchiev updateIncrGenius(UserBadgeAchiev badgeAchiev) {
+	public static BadgeAchiev updateIncrGenius(BadgeAchiev badgeAchiev) {
 		badgeAchiev = BadgeComputeContext.checkIncrBadgeProgress(
 				badgeAchiev,
 				BadgeComputeUtils.BADGE_GENIUS,
@@ -523,18 +523,18 @@ public class BadgeComputeUtils {
 	}
 	public static class VisitGenius implements BadgeVisitor {
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev) {
+		public BadgeAchiev visitBadge(BadgeAchiev achiev) {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev,
+		public BadgeAchiev visitBadge(BadgeAchiev achiev,
 				BadgeContext context) {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev,
+		public BadgeAchiev visitBadge(BadgeAchiev achiev,
 				BadgeContext context, BadgeRequest request) {
 			// TODO Auto-generated method stub
 			return null;
@@ -544,7 +544,7 @@ public class BadgeComputeUtils {
 	// ////////////////////////////////////////////////////////////////////////////
 	// HUY HIỆU QUỸ ĐẠO
 	// ////////////////////////////////////////////////////////////////////////////
-	public static UserBadgeAchiev updateRepeat(UserBadgeAchiev badgeAchiev) {
+	public static BadgeAchiev updateRepeat(BadgeAchiev badgeAchiev) {
 
 		return badgeAchiev;
 	}
@@ -553,7 +553,7 @@ public class BadgeComputeUtils {
 	 * @param badgeAchiev
 	 * @return
 	 */
-	public static UserBadgeAchiev updateIncrRepeat(UserBadgeAchiev badgeAchiev) {
+	public static BadgeAchiev updateIncrRepeat(BadgeAchiev badgeAchiev) {
 		badgeAchiev = BadgeComputeContext.checkIncrBadgeProgress(
 				badgeAchiev,
 				BadgeComputeUtils.BADGE_REPEAT,
@@ -562,18 +562,18 @@ public class BadgeComputeUtils {
 	}
 	public static class VisitRepeat implements BadgeVisitor {
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev) {
+		public BadgeAchiev visitBadge(BadgeAchiev achiev) {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev,
+		public BadgeAchiev visitBadge(BadgeAchiev achiev,
 				BadgeContext context) {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev,
+		public BadgeAchiev visitBadge(BadgeAchiev achiev,
 				BadgeContext context, BadgeRequest request) {
 			// TODO Auto-generated method stub
 			return null;
@@ -583,7 +583,7 @@ public class BadgeComputeUtils {
 	// ////////////////////////////////////////////////////////////////////////////
 	// HUY HIỆU BÀN THẮNG VÀNG
 	// ////////////////////////////////////////////////////////////////////////////
-	public static UserBadgeAchiev updateGoldenGoal(UserBadgeAchiev badgeAchiev) {
+	public static BadgeAchiev updateGoldenGoal(BadgeAchiev badgeAchiev) {
 
 		return badgeAchiev;
 	}
@@ -592,7 +592,7 @@ public class BadgeComputeUtils {
 	 * @param badgeAchiev
 	 * @return
 	 */
-	public static UserBadgeAchiev updateIncrGoldenGoal(UserBadgeAchiev badgeAchiev) {
+	public static BadgeAchiev updateIncrGoldenGoal(BadgeAchiev badgeAchiev) {
 		badgeAchiev = BadgeComputeContext.checkIncrBadgeProgress(
 				badgeAchiev,
 				BadgeComputeUtils.BADGE_GOLDENGOAL,
@@ -601,18 +601,18 @@ public class BadgeComputeUtils {
 	}
 	public static class VisitGoldenGoal implements BadgeVisitor {
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev) {
+		public BadgeAchiev visitBadge(BadgeAchiev achiev) {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev,
+		public BadgeAchiev visitBadge(BadgeAchiev achiev,
 				BadgeContext context) {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev,
+		public BadgeAchiev visitBadge(BadgeAchiev achiev,
 				BadgeContext context, BadgeRequest request) {
 			// TODO Auto-generated method stub
 			return null;
@@ -622,7 +622,7 @@ public class BadgeComputeUtils {
 	// ////////////////////////////////////////////////////////////////////////////
 	// HUY HIỆU SIÊU NHÂN
 	// ////////////////////////////////////////////////////////////////////////////
-	public static UserBadgeAchiev updateSuper(UserBadgeAchiev badgeAchiev) {
+	public static BadgeAchiev updateSuper(BadgeAchiev badgeAchiev) {
 
 		return badgeAchiev;
 	}
@@ -631,7 +631,7 @@ public class BadgeComputeUtils {
 	 * @param badgeAchiev
 	 * @return
 	 */
-	public static UserBadgeAchiev updateIncrSuper(UserBadgeAchiev badgeAchiev) {
+	public static BadgeAchiev updateIncrSuper(BadgeAchiev badgeAchiev) {
 		badgeAchiev = BadgeComputeContext.checkIncrBadgeProgress(
 				badgeAchiev,
 				BadgeComputeUtils.BADGE_SUPER,
@@ -640,18 +640,18 @@ public class BadgeComputeUtils {
 	}
 	public static class VisitSuper implements BadgeVisitor {
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev) {
+		public BadgeAchiev visitBadge(BadgeAchiev achiev) {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev,
+		public BadgeAchiev visitBadge(BadgeAchiev achiev,
 				BadgeContext context) {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev,
+		public BadgeAchiev visitBadge(BadgeAchiev achiev,
 				BadgeContext context, BadgeRequest request) {
 			// TODO Auto-generated method stub
 			return null;
@@ -661,7 +661,7 @@ public class BadgeComputeUtils {
 	// ////////////////////////////////////////////////////////////////////////////
 	// HUY HIỆU CHĂM CHỈ
 	// ////////////////////////////////////////////////////////////////////////////
-	public static UserBadgeAchiev updateHard(UserBadgeAchiev badgeAchiev) {
+	public static BadgeAchiev updateHard(BadgeAchiev badgeAchiev) {
 
 		return badgeAchiev;
 	}
@@ -670,7 +670,7 @@ public class BadgeComputeUtils {
 	 * @param badgeAchiev
 	 * @return
 	 */
-	public static UserBadgeAchiev updateIncrHard(UserBadgeAchiev badgeAchiev) {
+	public static BadgeAchiev updateIncrHard(BadgeAchiev badgeAchiev) {
 		badgeAchiev = BadgeComputeContext.checkIncrBadgeProgress(
 				badgeAchiev,
 				BadgeComputeUtils.BADGE_HARD,
@@ -679,18 +679,18 @@ public class BadgeComputeUtils {
 	}
 	public static class VisitHard implements BadgeVisitor {
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev) {
+		public BadgeAchiev visitBadge(BadgeAchiev achiev) {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev,
+		public BadgeAchiev visitBadge(BadgeAchiev achiev,
 				BadgeContext context) {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev,
+		public BadgeAchiev visitBadge(BadgeAchiev achiev,
 				BadgeContext context, BadgeRequest request) {
 			// TODO Auto-generated method stub
 			return null;
@@ -700,7 +700,7 @@ public class BadgeComputeUtils {
 	// ////////////////////////////////////////////////////////////////////////////
 	// HUY HIỆU BẤT BẠI
 	// ////////////////////////////////////////////////////////////////////////////
-	public static UserBadgeAchiev updateUndefeat(UserBadgeAchiev badgeAchiev) {
+	public static BadgeAchiev updateUndefeat(BadgeAchiev badgeAchiev) {
 
 		return badgeAchiev;
 	}
@@ -709,7 +709,7 @@ public class BadgeComputeUtils {
 	 * @param badgeAchiev
 	 * @return
 	 */
-	public static UserBadgeAchiev updateIncrUndefeat(UserBadgeAchiev badgeAchiev) {
+	public static BadgeAchiev updateIncrUndefeat(BadgeAchiev badgeAchiev) {
 		badgeAchiev = BadgeComputeContext.checkIncrBadgeProgress(
 				badgeAchiev,
 				BadgeComputeUtils.BADGE_UNDEFEAT,
@@ -718,18 +718,18 @@ public class BadgeComputeUtils {
 	}
 	public static class VisitUndefeat implements BadgeVisitor {
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev) {
+		public BadgeAchiev visitBadge(BadgeAchiev achiev) {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev,
+		public BadgeAchiev visitBadge(BadgeAchiev achiev,
 				BadgeContext context) {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev,
+		public BadgeAchiev visitBadge(BadgeAchiev achiev,
 				BadgeContext context, BadgeRequest request) {
 			// TODO Auto-generated method stub
 			return null;
@@ -739,7 +739,7 @@ public class BadgeComputeUtils {
 	// ////////////////////////////////////////////////////////////////////////////
 	// HUY HIỆU CHIẾN BINH
 	// ////////////////////////////////////////////////////////////////////////////
-	public static UserBadgeAchiev updateFighter(UserBadgeAchiev badgeAchiev) {
+	public static BadgeAchiev updateFighter(BadgeAchiev badgeAchiev) {
 
 		return badgeAchiev;
 	}
@@ -748,7 +748,7 @@ public class BadgeComputeUtils {
 	 * @param badgeAchiev
 	 * @return
 	 */
-	public static UserBadgeAchiev updateIncrFighter(UserBadgeAchiev badgeAchiev) {
+	public static BadgeAchiev updateIncrFighter(BadgeAchiev badgeAchiev) {
 		badgeAchiev = BadgeComputeContext.checkIncrBadgeProgress(
 				badgeAchiev,
 				BadgeComputeUtils.BADGE_FIGHTER,
@@ -757,18 +757,18 @@ public class BadgeComputeUtils {
 	}
 	public static class VisitFighter implements BadgeVisitor {
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev) {
+		public BadgeAchiev visitBadge(BadgeAchiev achiev) {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev,
+		public BadgeAchiev visitBadge(BadgeAchiev achiev,
 				BadgeContext context) {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev,
+		public BadgeAchiev visitBadge(BadgeAchiev achiev,
 				BadgeContext context, BadgeRequest request) {
 			// TODO Auto-generated method stub
 			return null;
@@ -778,7 +778,7 @@ public class BadgeComputeUtils {
 	// ////////////////////////////////////////////////////////////////////////////
 	// HUY HIỆU THÔNG THÁI
 	// ////////////////////////////////////////////////////////////////////////////
-	public static UserBadgeAchiev updateSage(UserBadgeAchiev badgeAchiev) {
+	public static BadgeAchiev updateSage(BadgeAchiev badgeAchiev) {
 
 		return badgeAchiev;
 	}
@@ -787,7 +787,7 @@ public class BadgeComputeUtils {
 	 * @param badgeAchiev
 	 * @return
 	 */
-	public static UserBadgeAchiev updateIncrSage(UserBadgeAchiev badgeAchiev) {
+	public static BadgeAchiev updateIncrSage(BadgeAchiev badgeAchiev) {
 		badgeAchiev = BadgeComputeContext.checkIncrBadgeProgress(
 				badgeAchiev,
 				BadgeComputeUtils.BADGE_SAGE,
@@ -796,18 +796,18 @@ public class BadgeComputeUtils {
 	}
 	public static class VisitSage implements BadgeVisitor {
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev) {
+		public BadgeAchiev visitBadge(BadgeAchiev achiev) {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev,
+		public BadgeAchiev visitBadge(BadgeAchiev achiev,
 				BadgeContext context) {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev,
+		public BadgeAchiev visitBadge(BadgeAchiev achiev,
 				BadgeContext context, BadgeRequest request) {
 			// TODO Auto-generated method stub
 			return null;

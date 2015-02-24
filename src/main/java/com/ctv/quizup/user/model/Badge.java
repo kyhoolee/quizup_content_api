@@ -18,8 +18,6 @@ public class Badge {
 	private Date createdDate;
 	
 	public Badge() {
-		
-		
 		this.createdDate = new Date();
 	}
 	
@@ -30,6 +28,15 @@ public class Badge {
 		this.description = description;
 		
 		this.createdDate = new Date();
+	}
+	
+	public Badge(Badge badge) {
+		this.badgeId = badge.getBadgeId();
+		this.iconURL = badge.getIconURL();
+		this.title = badge.getTitle();
+		this.description = badge.getDescription();
+		
+		this.createdDate = badge.getCreatedDate();
 	}
 	
 	public String getBadgeId() {

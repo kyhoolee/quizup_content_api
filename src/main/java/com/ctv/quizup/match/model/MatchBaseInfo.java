@@ -24,6 +24,17 @@ public class MatchBaseInfo {
 		this.modifiedDate = new Date();
 	}
 	
+	public MatchBaseInfo(String matchId, Date createdDate, String firstId, String secondId, String topicId) {
+		this.firstUserId = firstId;
+		this.secondUserId = secondId;
+		this.topicId = topicId;
+		
+		this.matchId = matchId;
+		
+		this.createdDate = createdDate;
+		this.modifiedDate = createdDate;
+	}
+	
 	public MatchBaseInfo(String firstId, String secondId, String topicId) {
 		this.firstUserId = firstId;
 		this.secondUserId = secondId;

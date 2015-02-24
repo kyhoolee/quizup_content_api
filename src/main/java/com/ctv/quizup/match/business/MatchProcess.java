@@ -4,10 +4,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import org.codehaus.jackson.map.ObjectMapper;
 
+import com.ctv.quizup.content.business.TopicProcess;
 import com.ctv.quizup.content.model.Question;
+import com.ctv.quizup.content.model.Topic;
 import com.ctv.quizup.content.redis.QuestionRedis;
+import com.ctv.quizup.content.redis.TopicRedis;
+import com.ctv.quizup.match.model.Match;
 import com.ctv.quizup.match.model.MatchBaseInfo;
 import com.ctv.quizup.match.model.MatchContent;
 import com.ctv.quizup.match.model.MatchLog;
@@ -16,11 +21,45 @@ import com.ctv.quizup.match.model.MatchResult;
 import com.ctv.quizup.match.redis.MatchBaseInfoRedis;
 import com.ctv.quizup.match.redis.MatchLogRedis;
 import com.ctv.quizup.match.redis.MatchResultRedis;
+import com.ctv.quizup.match.sql.MatchSQL;
+import com.ctv.quizup.user.business.impl.UserServiceProcess;
+import com.ctv.quizup.user.model.UserBaseInfo;
 
 public class MatchProcess {
 	MatchBaseInfoRedis matchBaseRedis;
 	MatchLogRedis matchLogRedis;
 	MatchResultRedis matchResultRedis;
+	
+	public MatchBaseInfoRedis getMatchBaseRedis() {
+		return matchBaseRedis;
+	}
+
+
+	public void setMatchBaseRedis(MatchBaseInfoRedis matchBaseRedis) {
+		this.matchBaseRedis = matchBaseRedis;
+	}
+
+
+	public MatchLogRedis getMatchLogRedis() {
+		return matchLogRedis;
+	}
+
+
+	public void setMatchLogRedis(MatchLogRedis matchLogRedis) {
+		this.matchLogRedis = matchLogRedis;
+	}
+
+
+	public MatchResultRedis getMatchResultRedis() {
+		return matchResultRedis;
+	}
+
+
+	public void setMatchResultRedis(MatchResultRedis matchResultRedis) {
+		this.matchResultRedis = matchResultRedis;
+	}
+
+	MatchSQL matchSQL;
 	
 	
 	
@@ -28,11 +67,15 @@ public class MatchProcess {
 		this.matchBaseRedis = new MatchBaseInfoRedis();
 		this.matchLogRedis = new MatchLogRedis();
 		this.matchResultRedis = new MatchResultRedis();
+		
+		this.matchSQL = new MatchSQL();
 	}
 	
 	
 	public boolean updateMatchBase(MatchBaseInfo matchBase) {
 		this.matchBaseRedis.updateMatchBaseInfo(matchBase.toString(), matchBase.getMatchId());
+		this.matchBaseRedis.updateMatchSorted(matchBase.getMatchId(), matchBase.getCreatedDate().getTime());
+		
 		return true;
 	}
 	public boolean updateFirstMatchLog(MatchLog matchLog) {
@@ -153,7 +196,7 @@ public class MatchProcess {
 		this.matchResultRedis.updateUserScore(score, firstId, secondId);
 		
 		score = this.matchResultRedis.getUserTopicScore(topicId, firstId, secondId);
-		score.incSecondScore();
+		score.incFirstScore();
 		score.incSecondScore();
 		this.matchResultRedis.updateUserTopicScore(score, topicId, firstId, secondId);
 	}
@@ -194,8 +237,12 @@ public class MatchProcess {
 		List<Question> quesList = new ArrayList<Question>();
 		
 		MatchLog log = this.matchLogRedis.getFirstLogByMatchId(matchId);
-		if(log == null)
-			return null;
+		if(log == null) {
+			log = this.getFirstMatchLogSQL(matchId);
+			if(log == null) {
+				return null;
+			}
+		}
 		
 		List<MatchQuestionLog> quesLog = log.getQuesLog();
 		QuestionRedis quesRedis = new QuestionRedis();
@@ -209,11 +256,92 @@ public class MatchProcess {
 		return quesList;
 	}
 	
+	
 	public MatchLog getSecondMatchLog(String matchId) {
 		return this.matchLogRedis.getSecondLogByMatchId(matchId);
 	}
 	public MatchResult getMatchResult(String matchId) {
 		return this.matchResultRedis.getMatchResultById(matchId);
+	}
+	
+	public static class FullMatch extends Match {
+		private UserBaseInfo firstUser;
+		private UserBaseInfo secondUser;
+		private Topic topic;
+		
+		
+		public FullMatch(Match match) {
+			super(match);
+			this.init(match);
+		}
+
+		public void init(Match match) {
+			UserServiceProcess userService = new UserServiceProcess();
+			this.firstUser = userService.getUser(match.getBaseInfo().getFirstUserId());
+			this.secondUser = userService.getUser(match.getBaseInfo().getSecondUserId());
+			
+			TopicRedis topicProcess = new TopicRedis();
+			this.topic = topicProcess.getTopicById(match.getBaseInfo().getTopicId());
+		}
+
+		public UserBaseInfo getFirstUser() {
+			return firstUser;
+		}
+
+
+		public void setFirstUser(UserBaseInfo firstUser) {
+			this.firstUser = firstUser;
+		}
+
+
+		public UserBaseInfo getSecondUser() {
+			return secondUser;
+		}
+
+
+		public void setSecondUser(UserBaseInfo secondUser) {
+			this.secondUser = secondUser;
+		}
+
+
+		public Topic getTopic() {
+			return topic;
+		}
+
+
+		public void setTopic(Topic topic) {
+			this.topic = topic;
+		}
+		
+		
+	}
+	
+
+	
+	public Match getMatch(String matchId) {
+		if(this.getMatchBaseInfo(matchId) == null) {
+			return null;
+		}
+		
+		Match match = new Match();
+		match.setBaseInfo(this.getMatchBaseInfo(matchId));
+		match.setFirstLog(this.getFirstMatchLog(matchId));
+		match.setSecondLog(this.getSecondMatchLog(matchId));
+		match.setResult(this.getMatchResult(matchId));
+		match.setContent(new MatchContent(this.getFirstMatchContent(matchId)));
+		
+		
+		
+		return match;
+	}
+	
+	public FullMatch getFullMatch(String matchId) {
+		Match match = this.getMatch(matchId);
+		if(match == null) 
+			return null;
+		FullMatch full = new FullMatch(match);
+		
+		return full;
 	}
 	
 	
@@ -238,22 +366,140 @@ public class MatchProcess {
 	
 	
 	public static void main(String[] args) {
-		String matchId = "1";
-		MatchBaseInfo matchBase = MatchBaseInfo.createMatchBaseInfo(matchId);
-		System.out.println(matchBase.toString());
-		
-		String playerId = "1";
-		MatchLog matchLog = MatchLog.createMatchLog(matchId, playerId);
-		System.out.println(matchLog.toString());
-		
-		playerId = "2";
-		matchLog = MatchLog.createMatchLog(matchId, playerId);
-		System.out.println(matchLog.toString());
-		
-		MatchResult matchResult = MatchResult.createMatchResult(matchId);
-		System.out.println(matchResult.toString());
-		
-		
-		
+
 	}
+	
+	
+	public MatchLog getFirstMatchLogSQL( String matchId) {
+		Match match = this.getMatchSQL(matchId);
+		if(match == null)
+			return null;
+		
+		return match.getFirstLog();
+	}
+
+	public MatchLog getSecondMatchLogSQL(String matchId) {
+		Match match = this.getMatchSQL(matchId);
+		if(match == null)
+			return null;
+		
+		return match.getSecondLog();
+	}
+
+	public MatchBaseInfo getMatchBaseSQL(String matchId) {
+		Match match = this.getMatchSQL(matchId);
+		if(match == null)
+			return null;
+		
+		return match.getBaseInfo();
+	}
+
+	public MatchResult getMatchResultSQL(String matchId) {
+		Match match = this.getMatchSQL(matchId);
+		if(match == null)
+			return null;
+		
+		return match.getResult();
+	}
+	
+	public Match getMatchSQL(String matchId) {
+		List<Match> matchs = this.matchSQL.getMatchById(matchId);
+		if(matchs.size() > 0)
+			return matchs.get(0);
+		else return null;
+	}
+	
+	public FullMatch getFullMatchSQL(String matchId) {
+		Match match = this.getMatchSQL(matchId);
+		if(match != null) {
+			FullMatch full = new FullMatch(match);
+			return full;
+		} else
+			return null;
+	}
+	
+	//////////////////////////////////////////////////////////////////////////////////////////////////////
+	// REDIS TO SQL
+	
+	public MatchLog getFirstLog( String matchId) {
+		MatchLog log = this.getFirstMatchLog(matchId);
+		if(log != null) {
+			return log;
+		}
+		
+		
+		Match match = this.getMatchSQL(matchId);
+		if(match == null)
+			return null;
+		
+		return match.getFirstLog();
+	}
+
+	public MatchLog getSecondLog(String matchId) {
+		MatchLog log = this.getSecondMatchLog(matchId);
+		if(log != null) {
+			return log;
+		}
+		
+		
+		Match match = this.getMatchSQL(matchId);
+		if(match == null)
+			return null;
+		
+		return match.getSecondLog();
+	}
+
+	public MatchBaseInfo getBase(String matchId) {
+		MatchBaseInfo base = this.getMatchBaseInfo(matchId);
+		if(base != null) {
+			return base;
+		}
+		
+		Match match = this.getMatchSQL(matchId);
+		if(match == null)
+			return null;
+		
+		return match.getBaseInfo();
+	}
+
+	public MatchResult getResult(String matchId) {
+		MatchResult result = this.getMatchResult(matchId);
+		if(result != null) {
+			return result;
+		}
+		
+		Match match = this.getMatchSQL(matchId);
+		if(match == null)
+			return null;
+		
+		return match.getResult();
+	}
+	
+	public Match getMatchRS(String matchId) {
+		Match match = this.getMatch(matchId);
+		if(match != null) {
+			return match;
+		}
+		
+		List<Match> matchs = this.matchSQL.getMatchById(matchId);
+		if(matchs.size() > 0)
+			return matchs.get(0);
+		else return null;
+	}
+	
+	public FullMatch getFullMatchRS(String matchId) {
+		FullMatch full = this.getFullMatch(matchId);
+		if(full != null) {
+			return full;
+		}
+		
+		Match match = this.getMatchSQL(matchId);
+		if(match != null) {
+			full = new FullMatch(match);
+			return full;
+		} else
+			return null;
+	}
+	
+	
 }

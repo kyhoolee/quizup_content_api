@@ -172,6 +172,23 @@ public class TopicRedis {
 		}
 	}
 	
+	public void removeTopicNew(String topicId) {
+		Jedis jedis = RedisPool.getJedis();
+		
+		try {
+			jedis.zrem(this.getTopicRankKey(ContentRankType.TOPIC_NEW_RANKING), topicId);
+			
+		} catch (JedisConnectionException ex) {
+			RedisPool.getIntance().returnBrokenResource(jedis);
+			
+		} catch (Exception e) {
+			logger.error(e);
+		} finally {
+			RedisPool.getIntance().returnResource(jedis);
+			
+		}
+	}
+	
 	public List<Topic> getTopicHot(long start, long size) {
 		List<Topic> topicList = this.getTopicByRankScore(ContentRankType.TOPIC_HOT_RANKING, start, size);
 		

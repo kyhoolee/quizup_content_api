@@ -11,6 +11,7 @@ import java.util.List;
 
 import com.ctv.quizup.user.model.User;
 import com.ctv.quizup.user.model.UserRelation;
+import com.ctv.quizup.util.JDBCProcess;
 
 public class UserRelationSQL {
 	public List<UserRelation> getListUserSocialInfo(ResultSet userSet) {
@@ -53,7 +54,7 @@ public class UserRelationSQL {
 		Statement statement = null;
 		try {
 			System.out.println("start connect");
-			dbConnection = JDBCProcess.getDBConnection();
+			dbConnection = JDBCProcess.getContentDB();
 			statement = dbConnection.createStatement();
 			
 			ResultSet result = statement.executeQuery(sqlStatement);

@@ -8,37 +8,45 @@ public class BadgeCountInfo {
 	
 	
 	public static enum CountType {
-		Match,
+		Match, // 1
 		
-		Match_Win,
-		Match_Tie,
-		Match_Lose,
+		Match_Win, // 2
+		Match_Tie, // 3
+		Match_Lose, // 4
 		
-		Match_Perfect,
-		Match_Good,
-		Match_Counter,
-		Match_1_Answer,
-		Match_0_Answer,
+		Topic_Music, // 5 category âm nhạc
+		Topic_Sport, // 6 category thể thao
+		Topic_Education, // 7 category giáo dục
+		Topic_Entertainment, // 8 category giải trí 
+		Topic_Nature, // 9 category tự nhiên 
+		Topic_LifeStyle, // 10 category phong cách sống 
+		Topic_Science, // 11 category khoa học 
 		
-		Topic,
+		Topic, // 12
 		
-		Topic_Music,
-		Topic_Sport,
-		Topic_Education,
-		Topic_Entertainment,
-		Topic_Nature,
-		Topic_LifeStyle,
-		Topic_Science,
+		Match_Perfect, // 13 trả lời đúng tất cả các câu hỏi
+		Match_Good, // 14 trả lời 5/7 câu hỏi
+		Match_Counter, // 15 lật ngược bằng câu cuối
+		Match_1_Answer, // 16  đúng duy nhất 1 câu
+		Match_0_Answer, // 17 không đúng câu nào
 		
-		Topic_Poem,
-		Topic_Map,
-		Topic_Singer,
-		Topic_Painter,
+		Topic_Poem, // 18 nhà thơ - chơi topic văn học
+		Topic_Map, // 19 bản đồ - chơi topic địa lý
+		Topic_Singer, // 20 ca sĩ - chơi topic âm nhạc
+		Topic_Painter, // 21 họa sĩ - chơi topic hội họa
+		Topic_Artist, // 22 nghệ sĩ - chơi topic giải trí 
+		Topic_Fan, // 23 người hâm mộ - chơi topic thể thao
+		Topic_Mathematican, // 24 nhà toán học - chơi topic toán học
+		Topic_Physist, // 25 nhà vật lý - chơi topic vật lý
+		Topic_Chemican, // 26 nhà hóa học - chơi topic hóa học 
 		
-		Frequent_Win,
-		Frequent_Answer,
+		Topic_Naturist, // 27 nhà tự nhiên học - chơi 1 topic trong category tự nhiên  
+		Topic_LifeStylist, // 28 nhịp sống trẻ - chọn 1 topic trong category phong cách sống
 		
-		Compete_Location
+		Frequent_Win, // 29 siêu nhân - chiến thắng liên tiếp 
+		Frequent_Answer, // 30 trình sam - lặp lại số câu trả lời giống hệt trận đấu trước 
+		
+		Compete_Location // 31 đối thủ - đối thủ ở các tỉnh khác nhau  
 	}
 	
 	private String badgeId;
@@ -126,4 +134,7 @@ public class BadgeCountInfo {
 	}
 
 
+	public static void main(String[] args) {
+		System.out.println(CountType.Match);
+	}
 }

@@ -4,28 +4,36 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import com.ctv.quizup.content.business.ContentProcess.UserTopicFullLevel;
 import com.ctv.quizup.content.model.Topic;
 import com.ctv.quizup.content.redis.TopicRedis;
 import com.ctv.quizup.statistics.TopicLevelCompute;
-import com.ctv.quizup.statistics.redis.UserLevelStatRedis;
+import com.ctv.quizup.statistics.redis.TriggerStatsRedis;
+import com.ctv.quizup.user.business.impl.LeaderBoardProcess.TopicRank;
 import com.ctv.quizup.user.model.UserBaseInfo;
 import com.ctv.quizup.user.model.UserTopicLevel;
 import com.ctv.quizup.user.redis.UserTopicLevelRedis;
+import com.ctv.quizup.util.LoggerUtil;
 
 
 
 public class UserTopicProcess {
+	public static Logger logger = LoggerUtil.getDailyLogger("UserTopicProcess" + "_error"); 
+	
 	UserTopicLevelRedis topicRedis;
-	UserFriendProcess friendProcess;
+	UserRelationProcess friendProcess;
+	UserServiceProcess userService;
 	
 	public UserTopicProcess() {
 		this.topicRedis = new UserTopicLevelRedis();
-		this.friendProcess = new UserFriendProcess();
+		this.friendProcess = new UserRelationProcess();
+		this.userService = new UserServiceProcess();
 	}
 	
 	
@@ -201,6 +209,32 @@ public class UserTopicProcess {
 		return topicList;
 	}
 	
+	public List<UserTopicLevel> getUserTopicStats(String userId, int size) {
+		List<UserTopicLevel> result = new ArrayList<UserTopicLevel>();
+		
+		List<UserTopicLevel> topicList = this.getUserTopicList(userId);
+
+		
+		UserTopicLevel otherLevel = new UserTopicLevel(userId, "others", 0, new Date());
+		otherLevel.setLevel(0);
+		
+		if(topicList.size() <= size) {
+			topicList.add(otherLevel);
+			return topicList;
+		} else {
+			int totalLevel = 0;
+			for(int i = size ; i < topicList.size(); i ++) {
+				totalLevel += topicList.get(i).getLevel();
+			}
+			otherLevel.setLevel(totalLevel);
+			
+			result.addAll(topicList.subList(0, size));
+			result.add(otherLevel);
+			
+			return result;
+		}
+	}
+	
 	public List<UserTopicLevel> getUserTopicList(String userId) {
 		List<UserTopicLevel> topicList = new ArrayList<UserTopicLevel>();
 		topicList = this.topicRedis.getUserLevelByUserId(userId);
@@ -229,6 +263,7 @@ public class UserTopicProcess {
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	public static class TopicUserFull extends UserTopicLevel {
 		private UserBaseInfo user;
+		private long rank;
 
 		public TopicUserFull() {
 			super();
@@ -239,9 +274,19 @@ public class UserTopicProcess {
 			this.setUser(user);
 		}
 		
-		public TopicUserFull(UserTopicLevel userTopic, UserBaseInfo user) {
+		public TopicUserFull(UserTopicLevel userTopic, UserBaseInfo user, long rank) {
 			super(userTopic);
 			this.user = user;
+			this.rank = rank;
+		}
+		
+
+		public long getRank() {
+			return rank;
+		}
+
+		public void setRank(long rank) {
+			this.rank = rank;
 		}
 
 		/**
@@ -284,12 +329,30 @@ public class UserTopicProcess {
 		for(String userId : userIdList) {
 			UserTopicLevel topicLevel = this.topicRedis.getUserTopicLevel(userId, topicId);
 			UserBaseInfo userBase = userProcess.getUser(userId);
-			TopicUserFull topicUser = new TopicUserFull(topicLevel, userBase);
+			
+			TopicUserFull topicUser = new TopicUserFull(topicLevel, userBase, startIndex);
+			startIndex ++;
 			
 			userList.add(topicUser);
 		}
 		
 		return userList;
+	}
+	
+	public List<TopicUserFull> getTopicPersonalList(String topicId, String userId) {
+		long rank = this.topicRedis.getUserLevelRank(topicId, userId);
+		
+		if(rank == -1) {
+			return this.getTopicUserList(topicId, 0, 2 * LeaderBoardProcess.PERSONAL_SIZE);
+		}
+		if(rank < LeaderBoardProcess.PERSONAL_SIZE) {
+			return this.getTopicUserList(topicId, 0, 2 * LeaderBoardProcess.PERSONAL_SIZE);
+		} else {
+			return this.getTopicUserList(
+					topicId, 
+					rank - LeaderBoardProcess.PERSONAL_SIZE, 
+					rank + LeaderBoardProcess.PERSONAL_SIZE);
+		}
 	}
 	
 
@@ -306,20 +369,35 @@ public class UserTopicProcess {
 			return userList;
 		}
 		
-		userList = userList.subList(startIndex, endIndex);
+		if(endIndex > userList.size()) {
+			endIndex = userList.size();
+		}
 		
-		return userList;
+		try {
+			userList = userList.subList(startIndex, endIndex);
+			return userList;
+		} catch (Exception e) {
+			
+		}
+		return new ArrayList<TopicUserFull>();
 	}
 	
 	public List<TopicUserFull> getTopicUserFriendList(String topicId, String userId) {
 		List<TopicUserFull> userList = new ArrayList<TopicUserFull>();
 		List<UserBaseInfo> userBaseList = this.friendProcess.getFriendByService(userId);
 		
-		for(UserBaseInfo user : userBaseList) {
-			UserTopicLevel topicLevel = this.topicRedis.getUserTopicLevel(user.getUserId(), topicId);
-			TopicUserFull topicUser = new TopicUserFull(topicLevel, user);
+		for(UserBaseInfo friend : userBaseList) {
+			UserTopicLevel topicLevel = this.topicRedis.getUserTopicLevel(friend.getUserId(), topicId);
+			long rank = this.topicRedis.getUserLevelRank(topicId, friend.getUserId());
+			TopicUserFull topicUser = new TopicUserFull(topicLevel, friend, rank);
 			userList.add(topicUser);
 		}
+		
+		UserTopicLevel topicLevel = this.topicRedis.getUserTopicLevel(userId, topicId);
+		UserBaseInfo user = this.userService.getUser(userId);
+		long rank = this.topicRedis.getUserLevelRank(topicId, userId);
+		TopicUserFull topicUser = new TopicUserFull(topicLevel, user, rank);
+		userList.add(topicUser);
 		
 		
 		Collections.sort(userList, new Comparator<UserTopicLevel>() {
@@ -347,8 +425,21 @@ public class UserTopicProcess {
 	public UserTopicLevel getUserTopic(String userId, String topicId) {
 		UserTopicLevel userTopic = new UserTopicLevel(userId, topicId);
 		userTopic = this.topicRedis.getUserTopicLevel(userId, topicId);
+//		userTopic.setUserId(userId);
+//		userTopic.setTopicId(topicId);
 		return userTopic;
 	}
+	
+	public TopicRank getUserTopicRank(String userId, String topicId) {
+		
+		//long rank = this.topicRedis.getUserLevelRank(userId, topicId);
+		//return rank;
+		return new LeaderBoardProcess.TopicRank(topicId, userId, this.topicRedis.getUserLevelRank(topicId, userId));
+	}
+	
+	
+	
+	
 	
 	public UserTopicLevel updateUserTopicLevel(String userId, String topicId, int addXP) {
 		UserTopicLevel topicLevel = this.getUserTopic(userId, topicId);

@@ -5,7 +5,7 @@ import java.util.Date;
 
 import org.codehaus.jackson.map.ObjectMapper;
 
-public class UserBadgeAchiev {
+public class BadgeAchiev {
 	private String userId;
 	private String badgeId;
 	
@@ -13,13 +13,14 @@ public class UserBadgeAchiev {
 	
 	private double progress;
 	private int count;
+	private int max;
 	
 	private boolean finished;
 	
 	private Date createdDate;
 	private Date modifiedDate;
 	
-	public UserBadgeAchiev(String userId, String badgeId) {
+	public BadgeAchiev(String userId, String badgeId) {
 		this.userId = userId;
 		this.badgeId = badgeId;
 		
@@ -31,12 +32,12 @@ public class UserBadgeAchiev {
 		this.modifiedDate = new Date();
 	}
 	
-	public UserBadgeAchiev(String userId, String badgeId, Badge badge) {
+	public BadgeAchiev(String userId, String badgeId, Badge badge) {
 		this(userId, badgeId);
 		this.badge = badge;
 	}
 	
-	public UserBadgeAchiev(){
+	public BadgeAchiev(){
 		this.progress = 0;
 		this.setFinished(false);
 		
@@ -131,6 +132,20 @@ public class UserBadgeAchiev {
 	 */
 	public void setCount(int count) {
 		this.count = count;
+	}
+
+	/**
+	 * @return the max
+	 */
+	public int getMax() {
+		return max;
+	}
+
+	/**
+	 * @param max the max to set
+	 */
+	public void setMax(int max) {
+		this.max = max;
 	}
 
 

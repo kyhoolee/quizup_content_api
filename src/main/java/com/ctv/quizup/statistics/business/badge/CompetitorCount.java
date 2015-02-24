@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.ctv.quizup.statistics.business.BadgeBusiness;
-import com.ctv.quizup.user.model.UserBadgeAchiev;
+import com.ctv.quizup.user.model.BadgeAchiev;
 
 public class CompetitorCount extends BaseCount {
 
@@ -19,7 +19,13 @@ public class CompetitorCount extends BaseCount {
 	}
 
 	@Override
-	public List<UserBadgeAchiev> countBadge() {
+	public List<BadgeAchiev> countBadge() {
+		return null;
+	}
+
+	@Override
+	public Map<String, List<BadgeAchiev>> countUserBadge() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 

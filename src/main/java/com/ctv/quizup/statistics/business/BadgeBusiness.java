@@ -1,30 +1,34 @@
 package com.ctv.quizup.statistics.business;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import com.ctv.quizup.match.business.MatchProcess;
-import com.ctv.quizup.match.model.MatchBaseInfo;
-import com.ctv.quizup.match.model.MatchLog;
-import com.ctv.quizup.match.model.MatchQuestionLog;
-import com.ctv.quizup.match.model.MatchResult;
 import com.ctv.quizup.statistics.business.badge.BaseCount;
 import com.ctv.quizup.statistics.business.badge.CompetitorCount;
+import com.ctv.quizup.statistics.business.badge.FrequencyCount;
 import com.ctv.quizup.statistics.business.badge.MatchResultCount;
 import com.ctv.quizup.statistics.business.badge.QuestionLogCount;
+import com.ctv.quizup.statistics.business.badge.CategoryLevelCount;
 import com.ctv.quizup.statistics.business.badge.TopicCount;
-import com.ctv.quizup.user.model.UserBadgeAchiev;
-import com.ctv.quizup.user.redis.BadgeRedis;
+import com.ctv.quizup.statistics.redis.TriggerStatsRedis;
+import com.ctv.quizup.user.model.BadgeAchiev;
 
 public class BadgeBusiness extends MatchBaseBusiness {
 	MatchResultCount resultCount;
 	QuestionLogCount logCount;
+	CategoryLevelCount categoryCount;
 	TopicCount topicCount;
+	FrequencyCount freqCount;
 	CompetitorCount compCount;
 	
 	List<BaseCount> baseCountList;
 	
 	
+	private TriggerStatsRedis triggerStatRedis;
+	
+
 	
 	
 	public MatchResultCount getResultCount() {
@@ -43,12 +47,12 @@ public class BadgeBusiness extends MatchBaseBusiness {
 		this.logCount = logCount;
 	}
 
-	public TopicCount getTopicCount() {
-		return topicCount;
+	public CategoryLevelCount getTopicCount() {
+		return categoryCount;
 	}
 
-	public void setTopicCount(TopicCount topicCount) {
-		this.topicCount = topicCount;
+	public void setTopicCount(CategoryLevelCount topicCount) {
+		this.categoryCount = topicCount;
 	}
 
 	public CompetitorCount getCompCount() {
@@ -70,15 +74,24 @@ public class BadgeBusiness extends MatchBaseBusiness {
 	
 
 	public BadgeBusiness() {
+		super();
+		this.setTriggerStatRedis(new TriggerStatsRedis());
 	}
+	
+	
 	
 	public void process(String matchId) {
 		this.initProcess(matchId);
 		this.updateCount();
 	}
 	
-	public List<UserBadgeAchiev> processUserBadge(String matchId, String userId) {
-		List<UserBadgeAchiev> badgeList = new ArrayList<UserBadgeAchiev>(); 
+	public Map<String, List<BadgeAchiev>> processBadge(String matchId) {
+		this.initProcess(matchId);
+		return this.getUpdateCount();
+	}
+	
+	public List<BadgeAchiev> processUserBadge(String matchId, String userId) {
+		List<BadgeAchiev> badgeList = new ArrayList<BadgeAchiev>(); 
 		
 		
 		return badgeList;
@@ -90,14 +103,24 @@ public class BadgeBusiness extends MatchBaseBusiness {
 		
 		this.resultCount = new MatchResultCount(this);
 		this.baseCountList.add(this.resultCount);
+		
 		this.logCount = new QuestionLogCount(this);
 		this.baseCountList.add(this.logCount);
+		
+		this.categoryCount = new CategoryLevelCount(this);
+		this.baseCountList.add(this.categoryCount);
+		
 		this.topicCount = new TopicCount(this);
 		this.baseCountList.add(this.topicCount);
-		this.compCount = new CompetitorCount(this);
-		this.baseCountList.add(this.compCount);
 		
+		this.freqCount = new FrequencyCount(this);
+		this.baseCountList.add(this.freqCount);
 		
+//		
+//		this.compCount = new CompetitorCount(this);
+//		this.baseCountList.add(this.compCount);
+		
+		/*
 		String firstId = this.getMatchBase().getFirstUserId();
 		List<MatchQuestionLog> firstLog = this.getFirstLog().getQuesLog();
 		
@@ -107,11 +130,41 @@ public class BadgeBusiness extends MatchBaseBusiness {
 		String topicId = this.getMatchBase().getTopicId();
 		
 		int result = this.getMatchResult().getResult();
-		
+		*/
 		
 		
 		
 	}
+	
+	public Map<String, List<BadgeAchiev>> getUpdateBadge() {
+		return this.resultCount.countUserBadge();
+	}
+	
+	public Map<String, List<BadgeAchiev>> getUpdateCount() {
+		Map<String, List<BadgeAchiev>> result = new HashMap<String, List<BadgeAchiev>>();
+		
+		
+		for(BaseCount base : this.baseCountList) {
+			Map<String, List<BadgeAchiev>> tmp = base.countUserBadge();
+			
+			if(tmp != null) {
+				for(String userId : tmp.keySet()) {
+					List<BadgeAchiev> achievs = tmp.get(userId);
+					List<BadgeAchiev> achievList = result.get(userId);
+					if(achievList == null) {
+						achievList = new ArrayList<BadgeAchiev>();
+					}
+					if(achievs != null) {
+						achievList.addAll(achievs);
+						result.put(userId, achievList);
+					}
+				}
+			}
+		}
+		
+		return result;
+	}
+	
 	
 	public void updateCount() {
 		for(BaseCount base : this.baseCountList) {
@@ -119,11 +172,11 @@ public class BadgeBusiness extends MatchBaseBusiness {
 		}
 	}
 	
-	public List<UserBadgeAchiev> updateBadgeCount() {
-		List<UserBadgeAchiev> badgeList = new ArrayList<UserBadgeAchiev>();
+	public List<BadgeAchiev> updateBadgeCount() {
+		List<BadgeAchiev> badgeList = new ArrayList<BadgeAchiev>();
 		
 		for(BaseCount base : this.baseCountList) {
-			List<UserBadgeAchiev> badges = base.countBadge();
+			List<BadgeAchiev> badges = base.countBadge();
 			badgeList.addAll(badges);
 		}
 		
@@ -139,11 +192,25 @@ public class BadgeBusiness extends MatchBaseBusiness {
 	}
 	
 	public void updateTopicCount() {
-		this.topicCount.count();
+		this.categoryCount.count();
 	}
 	
 	public void updateCompetitorCount() {
 		this.compCount.count();
+	}
+
+	/**
+	 * @return the triggerStatRedis
+	 */
+	public TriggerStatsRedis getTriggerStatRedis() {
+		return triggerStatRedis;
+	}
+
+	/**
+	 * @param triggerStatRedis the triggerStatRedis to set
+	 */
+	public void setTriggerStatRedis(TriggerStatsRedis triggerStatRedis) {
+		this.triggerStatRedis = triggerStatRedis;
 	}
 
 

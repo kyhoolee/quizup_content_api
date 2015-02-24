@@ -21,37 +21,26 @@ public class TopicLevelCompute {
 	
 	public static final int FINISH_XP = 40;
 
-//	public static int updateLevel(int totalXP) {
-//		// x(1) = 0 
-//		// x(n+1) = x(n) + (n+1) * 60 + 80;
-//
-//		int level = 0;
-//		
-//		if(totalXP < 200)
-//			return 1;
-//		
-//		level = 1 + ((totalXP - 190) / 60);
-//
-//		return level;
-//	}
 
-//	public static int updateLevelXP(int totalXP) {
-//		int levelXP = 0;
-//
-//		levelXP = totalXP - ((totalXP - 70) / 60) * 60;
-//
-//		return levelXP;
-//	}
-//	
-//	public static int levelBaseXP(int level) {
-//		int xp = level * 60 + 70;
-//		return xp;
-//	}
 	
-	public static UserTopicLevel updateXPFromMatchResult(UserTopicLevel level, int result, List<MatchQuestionLog> log) {
+	public static int getAddXPFromMatchResult(String matchId, int result, List<MatchQuestionLog> log) {
 		int addXP = getAddXPFromMatch(result);
 		logger.info("-- +resultXP: " + addXP);
-		addXP += getAddXPFromLog(log);
+		addXP += getAddXPFromLog(matchId, log);
+		logger.info("-- +logXP: " + addXP);
+		if(log.size() == MATCH_LEN) {
+			addXP += FINISH_XP;
+		}
+		logger.info("-- +finishXP: " + addXP);
+		
+		return addXP;
+		
+	}
+	
+	public static UserTopicLevel updateXPFromMatchResult(String matchId, UserTopicLevel level, int result, List<MatchQuestionLog> log) {
+		int addXP = getAddXPFromMatch(result);
+		logger.info("-- +resultXP: " + addXP);
+		addXP += getAddXPFromLog(matchId, log);
 		logger.info("-- +logXP: " + addXP);
 		if(log.size() == MATCH_LEN) {
 			addXP += FINISH_XP;
@@ -109,12 +98,13 @@ public class TopicLevelCompute {
 		return addXP;
 	}
 
-	public static int getAddXPFromLog(List<MatchQuestionLog> matchLog) {
+	public static int getAddXPFromLog(String matchId, List<MatchQuestionLog> matchLog) {
 		int addXP = 0;
 
 		for (MatchQuestionLog log : matchLog) {
-			//System.out.println(log.toString());
-			addXP += log.getPoint();
+			if(log.getMatchId().equalsIgnoreCase(matchId)) {
+				addXP += log.getPoint();
+			}
 		}
 
 		return addXP;

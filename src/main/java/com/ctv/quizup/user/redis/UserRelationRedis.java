@@ -17,7 +17,9 @@ import com.ctv.quizup.util.LoggerUtil;
 
 public class UserRelationRedis {
 	public static class RelationType {
+		public static final String PEND_RELATION = "pend_relation";
 		public static final String FRIEND_RELATION = "friend_relation";
+		public static final String BLOCK_RELATION = "block_relation";
 	}
 	
 	public static Logger logger = LoggerUtil.getDailyLogger("UserRelationRedis" + "_error");
@@ -158,5 +160,24 @@ public class UserRelationRedis {
 		}
 		
 		return userRelation;
+	}
+
+	public boolean checkUserRelation(String userId, String targetId,
+			String type) {
+		
+		Jedis jedis = RedisPool.getJedis();
+		try {
+			return jedis.hexists(this.getUserRelationHashesKey(userId, type), targetId);
+			
+		} catch (JedisConnectionException ex) {
+			RedisPool.getIntance().returnBrokenResource(jedis);
+			
+		} catch (Exception e) {
+			logger.error(e);
+		} finally {
+			RedisPool.getIntance().returnResource(jedis);
+			
+		}
+		return false;
 	}
 }

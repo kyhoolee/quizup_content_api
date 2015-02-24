@@ -1,5 +1,6 @@
 package com.ctv.quizup.statistics.business.badge;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,44 +12,11 @@ import com.ctv.quizup.statistics.business.BadgeBusiness;
 import com.ctv.quizup.statistics.business.LevelBusiness;
 import com.ctv.quizup.statistics.business.TopicBusiness;
 import com.ctv.quizup.user.business.impl.UserTopicProcess;
-import com.ctv.quizup.user.model.UserBadgeAchiev;
+import com.ctv.quizup.user.model.BadgeAchiev;
 import com.ctv.quizup.user.model.BadgeCountInfo.CountType;
 import com.ctv.quizup.user.model.UserTopicLevel;
 
-public class TopicCount extends BaseCount {
-/*
-2.1:  m nhạc (6 topic)
-Thần tượng âm nhạc: level 10 của 2 topic
-Siêu sao âm nhạc: Level 10 của 5 topic
-
-2.2.: Giải trí: (6 topic)
-Người nổi tiếng: level 10 ở 3 topic
-Ông/Nữ hoàng giải trí: level 10 ở 5 topic
-
-2.3: Thể thao: (2 topic)
-Vận động viên: Chơi topic thể thao
-Chuyên nghiệp: Chơi 2 topic thể thao
-
-2.4: Giáo dục (9 topic)
-Hiểu biết: Level 10 của 3 topic
-Thông thái: Level 10 của 5 topic
-Bậc thầy: Level 10 của 7 topic
-Thánh: level 10 của 9 topic
-
-2.5: Tự nhiên (4 topic)
-Nhà nghiên cứu: level 10 của 2 topic
-Giáo sư : level 10 của 4 topic
-
-2.6: Phong cách sống ( 7 topic)
-Sành: level 10 của 3 topic
-Lạ: Level 10 của 5 topic
-Độc: Level 10 của 7 topic
-
-2.7: Khoa học(4 topic)
-Nhà khoa học: level 10 của 2 topic
-Người khổng lồ: level 10 của 4 topic
-
- */
+public class CategoryLevelCount extends BaseCount {
 	
 	public static final String MUSIC = "1";
 	public static final String ENTERTAINMENT = "9";
@@ -60,7 +28,7 @@ Người khổng lồ: level 10 của 4 topic
 	
 	LevelBusiness levelProcess;
 
-	public TopicCount(BadgeBusiness business) {
+	public CategoryLevelCount(BadgeBusiness business) {
 		super(business);
 		this.levelProcess = new LevelBusiness();
 	}
@@ -69,19 +37,28 @@ Người khổng lồ: level 10 của 4 topic
 	public void count() {
 		String matchId = this.getBadgeBusiness().getMatchBase().getMatchId();
 		String firstId = this.getBadgeBusiness().getMatchBase().getFirstUserId();
-		List<MatchQuestionLog> firstLog = this.getBadgeBusiness().getFirstLog().getQuesLog();
-		
 		String secondId = this.getBadgeBusiness().getMatchBase().getSecondUserId();
-		List<MatchQuestionLog> secondLog = this.getBadgeBusiness().getSecondLog().getQuesLog();
-		
-		String topicId = this.getBadgeBusiness().getMatchBase().getTopicId();
-		
-		int result = this.getBadgeBusiness().getMatchResult().getResult();
+
 		
 		this.countLevel(firstId, matchId);
 		this.countLevel(secondId, matchId);
 	}
-
+	
+	public List<BadgeAchiev>  countLevelAchiev(String userId, String matchId) {
+		int oldLevel = 0;
+		int newLevel = 0;
+		
+		List<UserTopicLevel> levels = this.levelProcess.getLevelByMatch(userId, matchId);
+		oldLevel = levels.get(0).getLevel();
+		newLevel = levels.get(1).getLevel();
+		
+		String topicId = this.levelProcess.getMatchBase().getTopicId();
+		TopicRedis topicProcess = new TopicRedis();
+		Topic topic = topicProcess.getTopicById(topicId);
+		String categoryId = topic.getParentId();
+		
+		return this.countTopicLevelAchiev(userId, categoryId, topicId, oldLevel, newLevel);
+	}
 	
 	public int countLevel(String userId, String matchId) {
 		int oldLevel = 0;
@@ -99,6 +76,29 @@ Người khổng lồ: level 10 của 4 topic
 		this.countTopicLevel(userId, categoryId, topicId, oldLevel, newLevel);
 		
 		return newLevel;
+	}
+	
+	public List<BadgeAchiev> countTopicLevelAchiev(String userId, String categoryId, String topicId, int oldLevel, int level) {
+		List<BadgeAchiev> result = new ArrayList<BadgeAchiev>();
+		
+		if(level > oldLevel) {
+			if(categoryId.equalsIgnoreCase(EDUCATION)) {
+				result.addAll(this.countAchievEducationTopic(userId, level));
+			} else if(categoryId.equalsIgnoreCase(ENTERTAINMENT)) {
+				result.addAll(this.countAchievEntertainmentTopic(userId, level));
+			} else if(categoryId.equalsIgnoreCase(MUSIC)) {
+				result.addAll(this.countAchievMusicTopic(userId, level));
+			} else if(categoryId.equalsIgnoreCase(NATURE)) {
+				result.addAll(this.countAchievNatureTopic(userId, level));
+			} else if(categoryId.equalsIgnoreCase(SCIENCE)) {
+				result.addAll(this.countAchievScienceTopic(userId, level));
+			} else if(categoryId.equalsIgnoreCase(LIFESTYLE)) {
+				result.addAll(this.countAchievLifeStyleTopic(userId, level));
+			} else if(categoryId.equalsIgnoreCase(SPORT)) {
+				result.addAll(this.countAchievSportTopic(userId, level));
+			} 
+		}
+		return result;
 	}
 	
 	public void countTopicLevel(String userId, String categoryId, String topicId, int oldLevel, int level) {
@@ -124,6 +124,7 @@ Người khổng lồ: level 10 của 4 topic
 	public void checkMusicTopic(String userId) {
 		
 	}
+	
 	public void countMusicTopic(String userId, int level) {
 		this.countConditionBadge(userId, level, CountType.Topic_Music);
 	}
@@ -146,11 +147,48 @@ Người khổng lồ: level 10 của 4 topic
 		this.countConditionBadge(userId, level, CountType.Topic_Science);
 	}
 	
+	public List<BadgeAchiev> countAchievMusicTopic(String userId, int level) {
+		return this.countAchievConditionBadge(userId, level, CountType.Topic_Music);
+	}
+	public List<BadgeAchiev> countAchievSportTopic(String userId, int level ) {
+		return this.countAchievConditionBadge(userId, level, CountType.Topic_Sport);
+	}
+	public List<BadgeAchiev> countAchievEducationTopic(String userId, int level) {
+		return this.countAchievConditionBadge(userId, level, CountType.Topic_Education);
+	}
+	public List<BadgeAchiev> countAchievEntertainmentTopic(String userId, int level) {
+		return this.countAchievConditionBadge(userId, level, CountType.Topic_Entertainment);
+	}
+	public List<BadgeAchiev> countAchievNatureTopic(String userId, int level) {
+		return this.countAchievConditionBadge(userId, level, CountType.Topic_Nature);
+	}
+	public List<BadgeAchiev> countAchievLifeStyleTopic(String userId, int level) {
+		return this.countAchievConditionBadge(userId, level, CountType.Topic_LifeStyle);
+	}
+	public List<BadgeAchiev> countAchievScienceTopic(String userId, int level) {
+		return this.countAchievConditionBadge(userId, level, CountType.Topic_Science);
+	}
+	
 	
 	@Override
-	public List<UserBadgeAchiev> countBadge() {
+	public List<BadgeAchiev> countBadge() {
 		
 		return null;
+	}
+
+	@Override
+	public Map<String, List<BadgeAchiev>> countUserBadge() {
+		Map<String, List<BadgeAchiev>> result = new HashMap<String, List<BadgeAchiev>>();
+		
+		String matchId = this.getBadgeBusiness().getMatchBase().getMatchId();
+		String firstId = this.getBadgeBusiness().getMatchBase().getFirstUserId();
+		String secondId = this.getBadgeBusiness().getMatchBase().getSecondUserId();
+
+		
+		result.put(firstId, this.countLevelAchiev(firstId, matchId));
+		result.put(secondId, this.countLevelAchiev(secondId, matchId));
+		
+		return result;
 	}
 
 }

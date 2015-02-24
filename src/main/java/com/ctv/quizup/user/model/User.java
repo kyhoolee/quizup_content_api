@@ -7,7 +7,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 public class User {
 	private UserBaseInfo baseInfo;
-	private List<UserBadgeAchiev> achievement; 
+	private List<BadgeAchiev> achievement; 
 	private List<UserTopicLevel> level;
 	private List<UserRelation> relation;
 	
@@ -17,10 +17,10 @@ public class User {
 	public void setBaseInfo(UserBaseInfo baseInfo) {
 		this.baseInfo = baseInfo;
 	}
-	public List<UserBadgeAchiev> getAchievement() {
+	public List<BadgeAchiev> getAchievement() {
 		return achievement;
 	}
-	public void setAchievement(List<UserBadgeAchiev> achievement) {
+	public void setAchievement(List<BadgeAchiev> achievement) {
 		this.achievement = achievement;
 	}
 	public List<UserTopicLevel> getLevel() {

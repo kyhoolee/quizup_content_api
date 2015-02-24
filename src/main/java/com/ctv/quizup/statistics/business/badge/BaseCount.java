@@ -1,11 +1,13 @@
 package com.ctv.quizup.statistics.business.badge;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.ctv.quizup.statistics.business.BadgeBusiness;
 import com.ctv.quizup.user.model.Badge;
 import com.ctv.quizup.user.model.BadgeCountInfo;
-import com.ctv.quizup.user.model.UserBadgeAchiev;
+import com.ctv.quizup.user.model.BadgeAchiev;
 import com.ctv.quizup.user.model.BadgeCountInfo.CountType;
 import com.ctv.quizup.user.redis.BadgeRedis;
 import com.ctv.quizup.user.redis.UserBadgeAchievRedis;
@@ -22,6 +24,8 @@ public abstract class BaseCount {
 	}
 	
 	
+	
+	
 	public void countBadge(String userId, CountType type) {
 		//List<Badge> badgeList = this.getBadgeRedis().getBadgeListByType(CountType.Match);
 		List<BadgeCountInfo> badgeCountList = this.getBadgeRedis().getBadgeCountListByType(type);
@@ -32,7 +36,7 @@ public abstract class BaseCount {
 			Badge badge = this.getBadgeRedis().getBadgeById(badgeId);
 			
 			
-			UserBadgeAchiev badgeAchiev = this.getUserBadgeRedis().getUserAchievement(userId, badgeId);
+			BadgeAchiev badgeAchiev = this.getUserBadgeRedis().getUserAchievement(userId, badgeId);
 			if(badgeAchiev != null) {
 				badgeAchiev.setCount(badgeAchiev.getCount() + 1);
 				badgeAchiev.setProgress(badgeAchiev.getCount() * 1.0 / badgeScore);
@@ -40,7 +44,7 @@ public abstract class BaseCount {
 				
 				this.getUserBadgeRedis().updateUserBadge(badgeAchiev);
 			} else {
-				badgeAchiev = new UserBadgeAchiev(userId, badgeId, badge);
+				badgeAchiev = new BadgeAchiev(userId, badgeId, badge);
 				badgeAchiev.setCount(1);
 				badgeAchiev.setProgress(1.0/badgeScore);
 				badgeAchiev.setFinished((1 >= badgeScore));
@@ -49,6 +53,142 @@ public abstract class BaseCount {
 			}
 		}
 		
+	}
+	
+	public void resetBadge(String userId, CountType type) {
+		//List<Badge> badgeList = this.getBadgeRedis().getBadgeListByType(CountType.Match);
+		List<BadgeCountInfo> badgeCountList = this.getBadgeRedis().getBadgeCountListByType(type);
+		
+		for(BadgeCountInfo badgeCount : badgeCountList) {
+			String badgeId = badgeCount.getBadgeId();
+			//int badgeScore = badgeCount.getCountScore();
+			Badge badge = this.getBadgeRedis().getBadgeById(badgeId);
+			
+			
+			BadgeAchiev badgeAchiev = this.getUserBadgeRedis().getUserAchievement(userId, badgeId);
+			if(badgeAchiev != null) {
+				if(!badgeAchiev.isFinished()) {
+					badgeAchiev.setCount(0);
+					badgeAchiev.setProgress(0);
+					badgeAchiev.setFinished(false);
+					
+					this.getUserBadgeRedis().updateUserBadge(badgeAchiev);
+				}
+			} else {
+				badgeAchiev = new BadgeAchiev(userId, badgeId, badge);
+				badgeAchiev.setCount(0);
+				badgeAchiev.setProgress(0);
+				badgeAchiev.setFinished(false);
+				
+				this.getUserBadgeRedis().updateUserBadge(badgeAchiev);
+			}
+		}
+		
+	}
+	
+	public void addAchiev(Map<String, List<BadgeAchiev>> achievMap, String userId, List<BadgeAchiev> achievs) {
+		List<BadgeAchiev> achievList = achievMap.get(userId);
+		if(achievList == null) {
+			achievList = new ArrayList<BadgeAchiev>();
+		}
+		if(achievs != null) {
+			achievList.addAll(achievs);
+			achievMap.put(userId, achievList);
+		}
+	}
+	
+	public List<BadgeAchiev> countAchievBadge(String userId, CountType type) {
+		List<BadgeAchiev> result = new ArrayList<BadgeAchiev>();
+		
+		
+		List<BadgeCountInfo> badgeCountList = this.getBadgeRedis().getBadgeCountListByType(type);
+		//this.badgeStore.getBadgeCountListByType(type);
+		
+		for(BadgeCountInfo badgeCount : badgeCountList) {
+			String badgeId = badgeCount.getBadgeId();
+			int badgeScore = badgeCount.getCountScore();
+			Badge badge = this.getBadgeRedis().getBadgeById(badgeId);
+			//this.badgeStore.getBadgeById(badgeId);
+			
+			
+			BadgeAchiev badgeAchiev = this.getUserBadgeRedis().getUserAchievement(userId, badgeId);
+			boolean check = false;
+			
+			
+			if(badgeAchiev != null) {
+				if(!badgeAchiev.isFinished()) {
+					check = true;
+				}
+				
+				badgeAchiev.setCount(badgeAchiev.getCount() + 1);
+				badgeAchiev.setProgress(badgeAchiev.getCount() * 1.0 / badgeScore);
+				badgeAchiev.setMax(badgeScore);
+				badgeAchiev.setFinished((badgeAchiev.getCount() >= badgeScore));
+				
+				this.getUserBadgeRedis().updateUserBadge(badgeAchiev);
+				
+				
+			} else {
+				check = true;
+				
+				badgeAchiev = new BadgeAchiev(userId, badgeId, badge);
+				badgeAchiev.setCount(1);
+				badgeAchiev.setProgress(1.0/badgeScore);
+				badgeAchiev.setFinished((1 >= badgeScore));
+				badgeAchiev.setMax(badgeScore);
+				this.getUserBadgeRedis().updateUserBadge(badgeAchiev);
+			}
+			
+			if(badgeAchiev.isFinished() && check) {
+				result.add(badgeAchiev);
+			}
+		}
+		
+		
+		return result;
+	}
+	
+	public List<BadgeAchiev> countAchievConditionBadge(String userId, int value, CountType type) {
+		List<BadgeAchiev> result = new ArrayList<BadgeAchiev>();
+		
+		
+		//List<Badge> badgeList = this.getBadgeRedis().getBadgeListByType(CountType.Match);
+		List<BadgeCountInfo> badgeCountList = this.getBadgeRedis().getBadgeCountListByType(type);
+		
+		for(BadgeCountInfo badgeCount : badgeCountList) {
+			String badgeId = badgeCount.getBadgeId();
+			int badgeScore = badgeCount.getCountScore();
+			int condition = badgeCount.getCondition();
+			
+			if(value >= condition) {
+				
+				Badge badge = this.getBadgeRedis().getBadgeById(badgeId);
+				
+				BadgeAchiev badgeAchiev = this.getUserBadgeRedis().getUserAchievement(userId, badgeId);
+				if(badgeAchiev != null) {
+					badgeAchiev.setCount(badgeAchiev.getCount() + 1);
+					badgeAchiev.setProgress(badgeAchiev.getCount() * 1.0 / badgeScore);
+					badgeAchiev.setFinished((badgeAchiev.getCount() >= badgeScore));
+					
+					this.getUserBadgeRedis().updateUserBadge(badgeAchiev);
+				} else {
+					badgeAchiev = new BadgeAchiev(userId, badgeId, badge);
+					badgeAchiev.setCount(1);
+					badgeAchiev.setProgress(1.0/badgeScore);
+					badgeAchiev.setFinished((1 >= badgeScore));
+					
+					this.getUserBadgeRedis().updateUserBadge(badgeAchiev);
+				}
+				
+				if(badgeAchiev.isFinished()) {
+					result.add(badgeAchiev);
+				}
+			}
+			
+		}
+		
+		
+		return result;
 	}
 	
 	public void countConditionBadge(String userId, int value, CountType type) {
@@ -64,7 +204,7 @@ public abstract class BaseCount {
 				
 				Badge badge = this.getBadgeRedis().getBadgeById(badgeId);
 				
-				UserBadgeAchiev badgeAchiev = this.getUserBadgeRedis().getUserAchievement(userId, badgeId);
+				BadgeAchiev badgeAchiev = this.getUserBadgeRedis().getUserAchievement(userId, badgeId);
 				if(badgeAchiev != null) {
 					badgeAchiev.setCount(badgeAchiev.getCount() + 1);
 					badgeAchiev.setProgress(badgeAchiev.getCount() * 1.0 / badgeScore);
@@ -72,7 +212,7 @@ public abstract class BaseCount {
 					
 					this.getUserBadgeRedis().updateUserBadge(badgeAchiev);
 				} else {
-					badgeAchiev = new UserBadgeAchiev(userId, badgeId, badge);
+					badgeAchiev = new BadgeAchiev(userId, badgeId, badge);
 					badgeAchiev.setCount(1);
 					badgeAchiev.setProgress(1.0/badgeScore);
 					badgeAchiev.setFinished((1 >= badgeScore));
@@ -101,7 +241,9 @@ public abstract class BaseCount {
 
 	public abstract void count();
 	
-	public abstract List<UserBadgeAchiev> countBadge();
+	public abstract List<BadgeAchiev> countBadge();
+	
+	public abstract Map<String, List<BadgeAchiev>> countUserBadge();
 
 	/**
 	 * @return the userBadgeRedis

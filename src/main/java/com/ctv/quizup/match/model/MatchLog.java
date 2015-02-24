@@ -15,17 +15,32 @@ public class MatchLog {
 		this.quesLog = new ArrayList<MatchQuestionLog>();
 	}
 	
-	public static MatchLog createMatchLog(String matchId, String playerId) {
-		MatchLog log = new MatchLog();
-		log.setMatchId(matchId);
+	public void cleanLog() {
+		if(matchId == null) {
+			return;
+		}
+		List<MatchQuestionLog> logs = new ArrayList<MatchQuestionLog>();
 		
-		for(int i = 0 ; i < 7 ; i ++) {
-			MatchQuestionLog ques = new MatchQuestionLog(matchId, "" + i, i, playerId, 20); 
-			log.getQuesLog().add(ques);
+		for(int i = 0 ; i < quesLog.size() ; i ++) {
+			if(matchId.equalsIgnoreCase(quesLog.get(i).getMatchId())) {
+				logs.add(quesLog.get(i));
+			}
 		}
 		
-		return log;
+		this.quesLog = logs;
 	}
+	
+//	public static MatchLog createMatchLog(String matchId, String playerId) {
+//		MatchLog log = new MatchLog();
+//		log.setMatchId(matchId);
+//		
+//		for(int i = 0 ; i < 7 ; i ++) {
+//			MatchQuestionLog ques = new MatchQuestionLog(matchId, "" + i, i, playerId, 20); 
+//			log.getQuesLog().add(ques);
+//		}
+//		
+//		return log;
+//	}
 	
 	public String getMatchId() {
 		return matchId;

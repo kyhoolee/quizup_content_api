@@ -8,6 +8,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -30,11 +31,19 @@ public class UserNotifProcess {
 	}
 
 	public void createUserRegister(String userId, String regId) {
-		this.userRedis.writeUserNotification(userId, regId);
+		this.userRedis.writeUserRegId(userId, regId);
 	}
 
 	public String getUserRegId(String userId) {
 		return this.userRedis.getUserRegId(userId);
+	}
+	
+	public void broadcastNotif(String message) {
+		List<String> regList = this.userRedis.getAllRegId();
+		
+		for(String regId : regList) {
+			this.sendNotif(regId, message);
+		}
 	}
 
 	public String sendUserNotif(String userId, String message) {

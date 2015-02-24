@@ -11,15 +11,15 @@ import com.ctv.quizup.match.model.MatchQuestionLog;
 import com.ctv.quizup.match.model.MatchResult;
 
 import com.ctv.quizup.user.model.Badge;
-import com.ctv.quizup.user.model.UserBadgeAchiev;
+import com.ctv.quizup.user.model.BadgeAchiev;
 import com.ctv.quizup.statistics.badge.BadgeComputeUtils;
 
 public class BadgeComputeContext {
 	public static interface BadgeVisitor {
 		
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev);
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev, BadgeContext context);
-		public UserBadgeAchiev visitBadge(UserBadgeAchiev achiev, BadgeContext context, BadgeRequest request);
+		public BadgeAchiev visitBadge(BadgeAchiev achiev);
+		public BadgeAchiev visitBadge(BadgeAchiev achiev, BadgeContext context);
+		public BadgeAchiev visitBadge(BadgeAchiev achiev, BadgeContext context, BadgeRequest request);
 	};
 	
 	
@@ -161,19 +161,19 @@ public class BadgeComputeContext {
 		return level;
 	}
 
-	public static UserBadgeAchiev updateBadgeAchiev(
-			UserBadgeAchiev badgeAchiev, MatchResult result) {
+	public static BadgeAchiev updateBadgeAchiev(
+			BadgeAchiev badgeAchiev, MatchResult result) {
 
 		return badgeAchiev;
 	}
 
-	public static UserBadgeAchiev updateBadgeAchiev(
-			UserBadgeAchiev badgeAchiev, List<MatchQuestionLog> log) {
+	public static BadgeAchiev updateBadgeAchiev(
+			BadgeAchiev badgeAchiev, List<MatchQuestionLog> log) {
 
 		return badgeAchiev;
 	}
 	
-	public static UserBadgeAchiev increaseBadgeProgress(UserBadgeAchiev badgeAchiev, double incrProgress) {
+	public static BadgeAchiev increaseBadgeProgress(BadgeAchiev badgeAchiev, double incrProgress) {
 		
 			double newProgress = badgeAchiev.getProgress() + incrProgress;
 			badgeAchiev.setProgress(newProgress);
@@ -187,7 +187,7 @@ public class BadgeComputeContext {
 		return badgeAchiev;
 	}
 	
-	public static UserBadgeAchiev checkIncrBadgeProgress(UserBadgeAchiev badgeAchiev, String badgeId, double incrProgress) {
+	public static BadgeAchiev checkIncrBadgeProgress(BadgeAchiev badgeAchiev, String badgeId, double incrProgress) {
 		String badge = badgeAchiev.getBadgeId();
 		if(badge.equalsIgnoreCase(badgeId)){
 			double newProgress = badgeAchiev.getProgress() + incrProgress;
@@ -220,9 +220,9 @@ public class BadgeComputeContext {
 	}
 	
 	public static abstract class BadgeBaseContext implements BadgeContext {
-		private UserBadgeAchiev achivement;
+		private BadgeAchiev achivement;
 		
-		public BadgeBaseContext(UserBadgeAchiev achiev) {
+		public BadgeBaseContext(BadgeAchiev achiev) {
 			this.achivement = achiev;
 		}
 		
@@ -249,10 +249,10 @@ public class BadgeComputeContext {
 			return null;
 		}
 		
-		public UserBadgeAchiev getAchivement() {
+		public BadgeAchiev getAchivement() {
 			return achivement;
 		}
-		public void setAchivement(UserBadgeAchiev achivement) {
+		public void setAchivement(BadgeAchiev achivement) {
 			this.achivement = achivement;
 		}
 		
@@ -261,7 +261,7 @@ public class BadgeComputeContext {
 	public static class BadgeTopicContext extends BadgeBaseContext {
 		private MatchBaseInfo matchBaseInfo;
 		
-		public BadgeTopicContext(UserBadgeAchiev achiev, MatchBaseInfo matchBase){
+		public BadgeTopicContext(BadgeAchiev achiev, MatchBaseInfo matchBase){
 			super(achiev);
 			this.matchBaseInfo = matchBase;
 		}
@@ -287,7 +287,7 @@ public class BadgeComputeContext {
 		
 		
 		
-		public BadgeMatchContext(UserBadgeAchiev achiev, MatchResult result) {
+		public BadgeMatchContext(BadgeAchiev achiev, MatchResult result) {
 			super(achiev);
 			this.matchResult = result;
 		}
@@ -316,7 +316,7 @@ public class BadgeComputeContext {
 	public static class BadgeQuestionContext extends BadgeBaseContext {
 		private MatchLog log;
 		
-		public BadgeQuestionContext(UserBadgeAchiev achiev, MatchLog log) {
+		public BadgeQuestionContext(BadgeAchiev achiev, MatchLog log) {
 			super(achiev);
 			this.log = log;
 		}
